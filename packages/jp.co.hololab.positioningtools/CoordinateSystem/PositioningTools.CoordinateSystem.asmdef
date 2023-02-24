@@ -1,0 +1,17 @@
+{
+    "name": "PositioningTools.CoordinateSystem",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5e7031352d050134eb5f29d15e79dbc3",
+        "GUID:0df9762fedbe5e44f8c93309c32c356e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
