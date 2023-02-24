@@ -1,5 +1,6 @@
 {
-    "name": "HoloLab.PositioningSystem",
+    "name": "PositioningTools",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
