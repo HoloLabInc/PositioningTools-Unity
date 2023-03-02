@@ -1,0 +1,22 @@
+{
+  "name": "jp.co.hololab.positioningtools",
+  "version": "0.1.0",
+  "displayName": "Positioning Tools",
+  "description": "A package for aligning positions using geodetic coordinates, VPS or marker recognition",
+  "unity": "2019.4",
+  "author": {
+    "name": "HoloLab Inc."
+  },
+  "samples": [
+    {
+      "displayName": "CoordinateSystem",
+      "description": "Sample scenes for aligning objects.",
+      "path": "Samples~/CoordinateSystem"
+    },
+    {
+      "displayName": "LocationServices",
+      "description": "A Sample scene for using GPS information from a device.",
+      "path": "Samples~/LocationServices"
+    }
+  ]
+}
