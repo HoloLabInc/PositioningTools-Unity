@@ -18,8 +18,10 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             EditorAndPlayer = 3,
         }
 
+#pragma warning disable CS0414
         [SerializeField]
         private bool customSpace = false;
+#pragma warning restore CS0414
 
         [SerializeField]
         private string spaceType = "";

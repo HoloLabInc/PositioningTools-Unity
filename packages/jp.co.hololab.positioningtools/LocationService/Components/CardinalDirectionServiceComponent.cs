@@ -19,9 +19,11 @@ namespace HoloLab.PositioningTools
         [HideInInspector]
         private bool useDifferentServiceForEditor;
 
+#pragma warning disable CS0414
         [SerializeField]
         [HideInInspector]
         private Component cardinalDirectionServiceComponentForEditor = null;
+#pragma warning restore CS0414
 
         private async void Start()
         {
