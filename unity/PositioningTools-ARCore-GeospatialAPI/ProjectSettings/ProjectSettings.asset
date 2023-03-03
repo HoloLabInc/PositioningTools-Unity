@@ -445,8 +445,8 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
-  locationUsageDescription: 
+  cameraUsageDescription: Use camera for Geospatial API
+  locationUsageDescription: Use location for Geospatial API
   microphoneUsageDescription: 
   bluetoothUsageDescription: 
   switchNMETAOverride: 
