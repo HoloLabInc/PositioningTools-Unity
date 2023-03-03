@@ -1,0 +1,18 @@
+{
+    "name": "PositioningTools.ARCoreExtensions",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b35d8248e1a04478bb2d70fe76652ddf",
+        "GUID:92703082f92b41ba80f0d6912de66115",
+        "GUID:5e7031352d050134eb5f29d15e79dbc3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
