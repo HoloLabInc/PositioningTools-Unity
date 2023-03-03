@@ -16,7 +16,6 @@ namespace HoloLab.PositioningTools
 
         [SerializeField]
         [HideInInspector]
-        [Tooltip("Unity Editor での実行時に別の Service を利用する")]
         private bool useDifferentServiceForEditor;
 
 #pragma warning disable CS0414
