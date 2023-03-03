@@ -8,8 +8,10 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 {
     public class SpaceOrigin : MonoBehaviour
     {
+#pragma warning disable CS0414
         [SerializeField]
         private bool customSpace = false;
+#pragma warning restore CS0414
 
         [SerializeField]
         private string spaceType = "";
