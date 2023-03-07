@@ -1102,10 +1102,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReferencePointSettingsUI
       objectReference: {fileID: 0}
-    - target: {fileID: 4471818119018129813, guid: ce518045ed50b054e812ae5ec43b69d5, type: 3}
-      propertyPath: m_FontData.m_FontSize
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce518045ed50b054e812ae5ec43b69d5, type: 3}
 --- !u!224 &1445321669 stripped
