@@ -6,5 +6,12 @@
   "unity": "2021.3",
   "author": {
     "name": "HoloLab Inc."
-  }
+  },
+  "samples": [
+    {
+      "displayName": "WorldCoordinate-ARFoundation",
+      "description": "A sample scene for using NMEA devices with ARFoundation",
+      "path": "Samples~/WorldCoordinate-ARFoundation"
+    }
+  ]
 }
