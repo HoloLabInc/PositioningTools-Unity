@@ -32,6 +32,7 @@ namespace HoloLab.PositioningTools.Nmea
         public bool IsEnabled { get; }
 
         public bool DebugLogReceivedMessage { set; get; }
+        public string NmeaFilePathForSimulation { set; get; }
 
         public NmeaDeviceService()
         {
@@ -95,16 +96,17 @@ namespace HoloLab.PositioningTools.Nmea
             var deviceList = new List<NmeaDeviceInfo>();
 
 #if UNITY_EDITOR
-            var simulatedDeviceInfo = new NmeaDeviceInfo(
-                "Simulated NMEA Device",
-                () =>
-                {
-                    var sampleDataGuid = "33b4c09bce605804a94910d5a69229db";
-                    var filePath = AssetDatabase.GUIDToAssetPath(sampleDataGuid);
-                    return Task.FromResult<NmeaDevice>(new NmeaFileDevice(filePath));
-                }
-            );
-            deviceList.Add(simulatedDeviceInfo);
+            if (!string.IsNullOrEmpty(NmeaFilePathForSimulation))
+            {
+                var simulatedDeviceInfo = new NmeaDeviceInfo(
+                    "Simulated NMEA Device",
+                    () =>
+                    {
+                        return Task.FromResult<NmeaDevice>(new NmeaFileDevice(NmeaFilePathForSimulation));
+                    }
+                );
+                deviceList.Add(simulatedDeviceInfo);
+            }
 #endif
 
             var tcpDeviceInfo = new NmeaDeviceInfo(

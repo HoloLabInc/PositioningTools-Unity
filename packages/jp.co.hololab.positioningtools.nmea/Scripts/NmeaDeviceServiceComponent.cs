@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace HoloLab.PositioningTools.Nmea
 {
@@ -11,13 +14,25 @@ namespace HoloLab.PositioningTools.Nmea
         [SerializeField]
         private bool debugLogReceivedMessage;
 
+        [SerializeField]
+        private TextAsset nmeaFileForEditorSimulation;
+
         private NmeaDeviceService nmeaDeviceService;
 
         private void Awake()
         {
+            string nmeaFilePath = null;
+            if (nmeaFileForEditorSimulation != null)
+            {
+#if UNITY_EDITOR
+                nmeaFilePath = AssetDatabase.GetAssetPath(nmeaFileForEditorSimulation);
+#endif
+            }
+
             nmeaDeviceService = new NmeaDeviceService(SynchronizationContext.Current)
             {
-                DebugLogReceivedMessage = debugLogReceivedMessage
+                DebugLogReceivedMessage = debugLogReceivedMessage,
+                NmeaFilePathForSimulation = nmeaFilePath
             };
             nmeaDeviceService.OnDirectionUpdated += x => OnDirectionUpdated?.Invoke(x);
             nmeaDeviceService.OnLocationUpdated += x => OnLocationUpdated?.Invoke(x);
