@@ -1,0 +1,10 @@
+Version 2.2.0
+
+https://www.nuget.org/packages/SharpGIS.NmeaParser/
+
+Plugins
+  |- NmeaParser.dll : Dll for .NET Standard 2.0
+  |- NET45
+    |- NmeaParser.dll : Dll for .NET Framework 4.5.1
+  |- WSA
+    |- NmeaParser.dll : Dll for .NET Standard 2.0
