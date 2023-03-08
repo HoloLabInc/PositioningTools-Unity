@@ -1,6 +1,9 @@
 /PositioningTools.Immersal.Samples
 /PositioningTools.Immersal.Samples.meta
 
+/TextMesh Pro/
+/TextMesh Pro.meta
+
 /ImmersalSDK/Core/*
 
 !/ImmersalSDK/Core/ImmersalSDK.Core.asmdef
