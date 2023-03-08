@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HoloLab.PositioningTools.Immersal
+namespace HoloLab.PositioningTools.Immersal.UI
 {
     public class ImmersalUI : MonoBehaviour
     {

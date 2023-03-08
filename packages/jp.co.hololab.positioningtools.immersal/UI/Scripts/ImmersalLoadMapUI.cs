@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HoloLab.PositioningTools.Immersal
+namespace HoloLab.PositioningTools.Immersal.UI
 {
     public class ImmersalLoadMapUI : MonoBehaviour
     {
