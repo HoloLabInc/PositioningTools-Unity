@@ -14,9 +14,9 @@
       "path": "Samples~/CoordinateSystem"
     },
     {
-      "displayName": "LocationServices",
+      "displayName": "LocationService",
       "description": "A Sample scene for using GPS information from a device.",
-      "path": "Samples~/LocationServices"
+      "path": "Samples~/LocationService"
     }
   ]
 }
