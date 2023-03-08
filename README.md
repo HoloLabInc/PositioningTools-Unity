@@ -53,7 +53,21 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 "jp.co.hololab.positioningtools.immersal": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.immersal",
 ```
 
-### Vuforia
+## Setup for Vuforia
+
+#### Import Vuforia Engine
+
+Download the unitypackage for installing Vuforia Engine from the [developer portal](https://developer.vuforia.com/downloads/SDK) and import it.
+
+#### Import
+
+Open `Packages\manifest.json` and add the following lines in "dependencies".
+
+```
+"jp.co.hololab.positioningtools": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools",
+"jp.co.hololab.positioningtools.geographiccoordinate": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.geographiccoordinate",
+"jp.co.hololab.positioningtools.vuforia": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.vuforia",
+```
 
 ## Sample Unity Projects
 
