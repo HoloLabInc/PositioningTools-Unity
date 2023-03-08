@@ -9,7 +9,7 @@ PositioningTools-Unity is a module for aligning positions using geodetic coordin
 - ARFoundation
 - ARCore Extensions
 
-#### Install
+#### Import
 
 Open `Packages\manifest.json` and add the following lines in "dependencies".
 
@@ -21,7 +21,7 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 
 ## Setup for NMEA devices
 
-#### Install
+#### Import
 
 Open `Packages\manifest.json` and add the following lines in "dependencies".
 
@@ -37,7 +37,13 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 
 - ARFoundation
 
-#### Install
+#### Import Immersal SDK
+
+Download the Immersal SDK Core unitypackage from the [developer portal](https://developers.immersal.com).  
+Download the Immersal SDK Core Assembly Definition unitypackage from [this link](https://github.com/HoloLabInc/PositioningTools-Unity/raw/main/_tools/ImmersalSDK_AssemblyDefinition.unitypackage).  
+Import these packages.  
+
+#### Import
 
 Open `Packages\manifest.json` and add the following lines in "dependencies".
 
