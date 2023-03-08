@@ -2,9 +2,7 @@
 
 PositioningTools-Unity is a module for aligning positions using geodetic coordinates, VPS or marker recognition.
 
-## Setup
-
-### ARCore Geospatial API
+## Setup for ARCore Geospatial API
 
 #### Requirements
 
@@ -21,9 +19,33 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 "jp.co.hololab.positioningtools.geographiccoordinate": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.geographiccoordinate",
 ```
 
-### NMEA devices
+## Setup for NMEA devices
 
-### Immersal
+#### Install
+
+Open `Packages\manifest.json` and add the following lines in "dependencies".
+
+```
+"jp.co.hololab.positioningtools": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools",
+"jp.co.hololab.positioningtools.geographiccoordinate": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.geographiccoordinate",
+"jp.co.hololab.positioningtools.nmea": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.nmea",
+```
+
+## Setup for Immersal
+
+#### Requirements
+
+- ARFoundation
+
+#### Install
+
+Open `Packages\manifest.json` and add the following lines in "dependencies".
+
+```
+"jp.co.hololab.positioningtools": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools",
+"jp.co.hololab.positioningtools.geographiccoordinate": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.geographiccoordinate",
+"jp.co.hololab.positioningtools.immersal": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.immersal",
+```
 
 ### Vuforia
 
