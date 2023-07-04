@@ -8,6 +8,7 @@ namespace HoloLab.PositioningTools.ARCoreExtensions
 {
     public class ARCoreSpatialApiService : ICardinalDirectionService, IGeographicLocationService
     {
+        private readonly Google.XR.ARCoreExtensions.ARCoreExtensions arCoreExtensions;
         private readonly AREarthManager earthManager;
 
         private bool isRunning;
@@ -17,8 +18,9 @@ namespace HoloLab.PositioningTools.ARCoreExtensions
         public event Action<CardinalDirection> OnDirectionUpdated;
         public event Action<GeographicLocation> OnLocationUpdated;
 
-        public ARCoreSpatialApiService(AREarthManager arEarthManager)
+        public ARCoreSpatialApiService(Google.XR.ARCoreExtensions.ARCoreExtensions arCoreExtensions, AREarthManager arEarthManager)
         {
+            this.arCoreExtensions = arCoreExtensions;
             earthManager = arEarthManager;
         }
 
@@ -32,6 +34,8 @@ namespace HoloLab.PositioningTools.ARCoreExtensions
 #if UNITY_IOS
             UnityEngine.Input.location.Start();
 #endif
+            arCoreExtensions.ARCoreExtensionsConfig.GeospatialMode = GeospatialMode.Enabled;
+
             if (!isRunning)
             {
                 isRunning = true;
@@ -54,6 +58,8 @@ namespace HoloLab.PositioningTools.ARCoreExtensions
 #if UNITY_IOS
             UnityEngine.Input.location.Stop();
 #endif
+            arCoreExtensions.ARCoreExtensionsConfig.GeospatialMode = GeospatialMode.Disabled;
+
             isRunning = false;
             return Task.FromResult<(bool, Exception)>((true, null));
         }
