@@ -10,6 +10,9 @@ namespace HoloLab.PositioningTools.ARCoreExtensions
     public class ARCoreSpatialApiServiceComponent : MonoBehaviour, ICardinalDirectionService, IGeographicLocationService
     {
         [SerializeField]
+        private Google.XR.ARCoreExtensions.ARCoreExtensions arCoreExtensions = null;
+
+        [SerializeField]
         private AREarthManager arEarthManager = null;
 
         private ARCoreSpatialApiService arCoreSpatialApiService;
@@ -19,7 +22,7 @@ namespace HoloLab.PositioningTools.ARCoreExtensions
 
         private void Awake()
         {
-            arCoreSpatialApiService = new ARCoreSpatialApiService(arEarthManager);
+            arCoreSpatialApiService = new ARCoreSpatialApiService(arCoreExtensions, arEarthManager);
             arCoreSpatialApiService.OnDirectionUpdated += x => OnDirectionUpdated?.Invoke(x);
             arCoreSpatialApiService.OnLocationUpdated += x => OnLocationUpdated?.Invoke(x);
         }

@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardinalDirectionService: {fileID: 1034730312038118189}
   geographicLocationService: {fileID: 1034730312038118188}
+  deviceTransform: {fileID: 0}
+  autoUpdateReferencePoint: 0
 --- !u!114 &3519097507295439029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +81,10 @@ PrefabInstance:
       propertyPath: longitude
       value: 139.7183
       objectReference: {fileID: 0}
+    - target: {fileID: 1430903366800746541, guid: 9c86022e40be83144966b86fca475afa, type: 3}
+      propertyPath: arCoreExtensions
+      value: 
+      objectReference: {fileID: 3519097507295439029}
     - target: {fileID: 5657317703629107734, guid: 9c86022e40be83144966b86fca475afa, type: 3}
       propertyPath: m_Name
       value: ARCoreSpatialAPIGeographicPoseService
