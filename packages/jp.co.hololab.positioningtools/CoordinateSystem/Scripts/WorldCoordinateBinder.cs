@@ -28,7 +28,10 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         private void Start()
         {
-            StartCoroutine(Bind());
+            if (IsBindingValid())
+            {
+                StartCoroutine(Bind());
+            }
         }
 
         private IEnumerator Bind()
