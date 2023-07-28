@@ -7,12 +7,25 @@ namespace HoloLab.PositioningTools.CoordinateSystem
     /// </summary>
     public class WorldBinding
     {
-        public Pose ApplicationPose { get; }
+        /// <summary>
+        /// World binding pose in Unity coordinate
+        ///
+        /// If Pose is null, please use Transform value.
+        /// </summary>
+        public Pose? Pose { get; }
+
+        /// <summary>
+        /// World binding transform in Unity coordinate
+        ///
+        /// If Transform is null, please use Pose value.
+        /// </summary>
+        public Transform Transform { get; }
+
         public GeodeticPose GeodeticPose { get; }
 
-        public WorldBinding(Pose applicationPose, GeodeticPose geodeticPose)
+        public WorldBinding(Pose pose, GeodeticPose geodeticPose)
         {
-            ApplicationPose = applicationPose;
+            Pose = pose;
             GeodeticPose = geodeticPose;
         }
     }
