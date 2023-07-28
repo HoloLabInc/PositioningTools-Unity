@@ -145,15 +145,27 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             var gp = geodeticPosition.ToGeodeticPosition();
             var geodeticPose = new GeodeticPose(gp, enuRotation);
-            var pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.ApplicationPose);
 
-            if (BindRotation)
+            // Bind coordinates by transform
+            if (worldBinding.Transform != null)
             {
-                transform.SetPositionAndRotation(pose.position, pose.rotation);
+                // TODO: implement
+                return;
             }
-            else
+
+            // Bind coordinates by pose
+            if (worldBinding.Pose.HasValue)
             {
-                transform.position = pose.position;
+                var pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.Pose.Value);
+
+                if (BindRotation)
+                {
+                    transform.SetPositionAndRotation(pose.position, pose.rotation);
+                }
+                else
+                {
+                    transform.position = pose.position;
+                }
             }
         }
 
@@ -166,9 +178,21 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         private void UpdateGeodeticPositionWithCurrentPosition(WorldBinding worldBinding)
         {
             var pose = new Pose(transform.position, transform.rotation);
-            var gp = GetGeodeticPoseWithBoundPoint(pose, worldBinding.GeodeticPose, worldBinding.ApplicationPose);
-            geodeticPosition = new GeodeticPositionForInspector(gp.GeodeticPosition);
-            enuRotation = gp.EnuRotation;
+
+            // Update position by transform
+            if (worldBinding.Transform != null)
+            {
+                // TODO: implement
+                return;
+            }
+
+            // Update position by pose
+            if (worldBinding.Pose.HasValue)
+            {
+                var gp = GetGeodeticPoseWithBoundPoint(pose, worldBinding.GeodeticPose, worldBinding.Pose.Value);
+                geodeticPosition = new GeodeticPositionForInspector(gp.GeodeticPosition);
+                enuRotation = gp.EnuRotation;
+            }
         }
 
         internal static Pose GetUnityPoseWithBoundPoint(GeodeticPose targetPose, GeodeticPose boundPoseInWorld,
