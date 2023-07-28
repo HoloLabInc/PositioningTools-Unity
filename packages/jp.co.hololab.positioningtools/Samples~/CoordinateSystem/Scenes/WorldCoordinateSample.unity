@@ -351,6 +351,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1932592257299019689, guid: a95c33bf090eee64a93ae6f0fbfbbaca, type: 3}
+      propertyPath: runtimeType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1932592257299019689, guid: a95c33bf090eee64a93ae6f0fbfbbaca, type: 3}
       propertyPath: geodeticPosition.latitude
       value: 35.63126339154305
       objectReference: {fileID: 0}
