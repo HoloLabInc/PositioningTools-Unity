@@ -364,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1932592257299019690, guid: a95c33bf090eee64a93ae6f0fbfbbaca, type: 3}
       propertyPath: m_Name
-      value: WorldCoordinateBinderForEditor
+      value: WorldCoordinateBinder
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a95c33bf090eee64a93ae6f0fbfbbaca, type: 3}
@@ -422,6 +422,14 @@ PrefabInstance:
     - target: {fileID: 1965964464602128936, guid: 67b146d87cd93f64697e76b25869ef03, type: 3}
       propertyPath: m_Name
       value: SampleObjects
+      objectReference: {fileID: 0}
+    - target: {fileID: 1965964465272821500, guid: 67b146d87cd93f64697e76b25869ef03, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 29.258125
+      objectReference: {fileID: 0}
+    - target: {fileID: 1965964465908056446, guid: 67b146d87cd93f64697e76b25869ef03, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 54.17546
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67b146d87cd93f64697e76b25869ef03, type: 3}
