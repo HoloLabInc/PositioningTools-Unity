@@ -149,7 +149,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             // Bind coordinates by transform
             if (worldBinding.Transform != null)
             {
+                Debug.LogWarning("implement");
                 // TODO: implement
+                var pose = GetUnityPoseWithBoundTransform(geodeticPose, worldBinding.GeodeticPose, worldBinding.Transform);
                 return;
             }
 

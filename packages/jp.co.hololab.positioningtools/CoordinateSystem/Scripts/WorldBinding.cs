@@ -28,5 +28,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             Pose = pose;
             GeodeticPose = geodeticPose;
         }
+
+        public WorldBinding(Transform transform, GeodeticPose geodeticPose)
+        {
+            Transform = transform;
+            GeodeticPose = geodeticPose;
+        }
     }
 }

@@ -40,12 +40,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             yield return null;
 
             var spaceCoordinateManager = CoordinateManager.Instance;
-            var pose = new Pose(transform.position, transform.rotation);
+            // var pose = new Pose(transform.position, transform.rotation);
             var gPosition = this.geodeticPosition.ToGeodeticPosition();
             var rotation = Quaternion.AngleAxis(northHeading, Vector3.up);
             var gPose = new GeodeticPose(gPosition, rotation);
 
-            var binding = new WorldBinding(pose, gPose);
+            var binding = new WorldBinding(transform, gPose);
             spaceCoordinateManager.BindCoordinates(binding);
         }
 
