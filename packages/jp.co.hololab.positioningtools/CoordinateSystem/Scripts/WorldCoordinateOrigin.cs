@@ -114,7 +114,14 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 #if UNITY_EDITOR
         public void UpdateBinding()
         {
-            if (spaceCoordinateManager == null)
+            WorldBinding worldBinding;
+
+            var parentBinder = GetComponentInParent<WorldCoordinateBinder>();
+            if (parentBinder != null)
+            {
+                worldBinding = parentBinder.TransformWorldBinding;
+            }
+            else if (spaceCoordinateManager == null)
             {
                 spaceCoordinateManager = FindObjectOfType<CoordinateManager>();
 
@@ -122,9 +129,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 {
                     return;
                 }
+                worldBinding = spaceCoordinateManager.WorldBindingInEditor;
             }
-
-            var worldBinding = spaceCoordinateManager.WorldBindingInEditor;
+            else
+            {
+                return;
+            }
 
             switch (positionSettingMode)
             {
@@ -138,7 +148,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     break;
             }
         }
-
 #endif
 
         public void BindCoordinates(WorldBinding worldBinding)

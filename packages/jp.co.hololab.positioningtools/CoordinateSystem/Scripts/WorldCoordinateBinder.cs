@@ -42,6 +42,18 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
         }
 
+        public WorldBinding TransformWorldBinding
+        {
+            get
+            {
+                var gPosition = geodeticPosition.ToGeodeticPosition();
+                var rotation = Quaternion.AngleAxis(northHeading, Vector3.up);
+                var gPose = new GeodeticPose(gPosition, rotation);
+
+                return new WorldBinding(transform, gPose);
+            }
+        }
+
         private void Start()
         {
             BindIfBindingValid();
@@ -57,14 +69,8 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         private void Bind()
         {
-            var gPosition = geodeticPosition.ToGeodeticPosition();
-            var rotation = Quaternion.AngleAxis(northHeading, Vector3.up);
-            var gPose = new GeodeticPose(gPosition, rotation);
-
-            var binding = new WorldBinding(transform, gPose);
-
             var spaceCoordinateManager = CoordinateManager.Instance;
-            spaceCoordinateManager.BindCoordinates(binding);
+            spaceCoordinateManager.BindCoordinates(TransformWorldBinding);
         }
     }
 }
