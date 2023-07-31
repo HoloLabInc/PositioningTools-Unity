@@ -26,10 +26,10 @@ namespace HoloLab.PositioningTools.CoordinateSystem.Samples
                 position = worldBinding.Transform.position;
                 eulerAngles = worldBinding.Transform.eulerAngles;
             }
-            else if (worldBinding.Pose.HasValue)
+            else if (worldBinding.ApplicationPose.HasValue)
             {
-                position = worldBinding.Pose.Value.position;
-                eulerAngles = worldBinding.Pose.Value.rotation.eulerAngles;
+                position = worldBinding.ApplicationPose.Value.position;
+                eulerAngles = worldBinding.ApplicationPose.Value.rotation.eulerAngles;
             }
 
             var geodeticPose = worldBinding.GeodeticPose;

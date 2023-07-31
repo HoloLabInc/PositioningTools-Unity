@@ -151,11 +151,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         internal static WorldBinding CalcWorldBindingWithSubReferencePoint(WorldBinding referencePoint, WorldBinding subReferencePoint)
         {
-            var forward = subReferencePoint.Pose.Value.position - referencePoint.Pose.Value.position;
+            var forward = subReferencePoint.ApplicationPose.Value.position - referencePoint.ApplicationPose.Value.position;
             forward.y = 0;
             var cameraRotation = Quaternion.LookRotation(forward, Vector3.up);
 
-            var applicationPose = new Pose(referencePoint.Pose.Value.position, cameraRotation);
+            var applicationPose = new Pose(referencePoint.ApplicationPose.Value.position, cameraRotation);
 
             var enu = GeographicCoordinateConversion.GeodeticToEnu(subReferencePoint.GeodeticPose.GeodeticPosition, referencePoint.GeodeticPose.GeodeticPosition);
             var headingDegrees = Mathf.Atan2((float)enu.East, (float)enu.North) * Mathf.Rad2Deg;

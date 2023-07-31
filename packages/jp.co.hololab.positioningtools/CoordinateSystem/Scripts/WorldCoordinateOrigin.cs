@@ -197,9 +197,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
 
             // Bind coordinates by pose
-            if (worldBinding.Pose.HasValue)
+            if (worldBinding.ApplicationPose.HasValue)
             {
-                var pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.Pose.Value);
+                var pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.ApplicationPose.Value);
 
                 if (BindRotation)
                 {
@@ -231,9 +231,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
 
             // Update position by pose
-            if (worldBinding.Pose.HasValue)
+            if (worldBinding.ApplicationPose.HasValue)
             {
-                var gp = GetGeodeticPoseWithBoundPoint(pose, worldBinding.GeodeticPose, worldBinding.Pose.Value);
+                var gp = GetGeodeticPoseWithBoundPoint(pose, worldBinding.GeodeticPose, worldBinding.ApplicationPose.Value);
                 geodeticPosition = new GeodeticPositionForInspector(gp.GeodeticPosition);
                 enuRotation = gp.EnuRotation;
             }
