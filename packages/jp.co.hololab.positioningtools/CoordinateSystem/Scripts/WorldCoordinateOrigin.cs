@@ -260,53 +260,16 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             var unityPosition = unityPose.position;
             var unityRotation = unityPose.rotation;
 
-            // Calculates the position in the ENU coordinate of "boundPose".
-            var relativePositionVector = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPosition - boundPoseInUnity.position);
-            var relativePosition = new EnuPosition(relativePositionVector.x, relativePositionVector.z, relativePositionVector.y);
+            var relativePosition = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPosition - boundPoseInUnity.position);
             var relativeRotation = unityRotation * Quaternion.Inverse(boundPoseInUnity.rotation);
 
-            // var boundPoseInWorldRotation = Quaternion.Inverse(boundPoseInWorld.EnuRotation);
-            //enuPosition = boundPoseInWorldRotation * x unity vector;
-
-            var enuPositionUnity = boundPoseInWorld.EnuRotation * relativePositionVector;
+            var enuPositionUnity = boundPoseInWorld.EnuRotation * relativePosition;
             var enuPosition = new EnuPosition(enuPositionUnity.x, enuPositionUnity.z, enuPositionUnity.y);
-            //var enuPosition = new EnuPosition(boundPoseInWorld.EnuRotation * relativePositionVector);
 
-
-            //relativeRotation = boundPoseInWorldRotation * targetPose.EnuRotation;
             var enuRotation = boundPoseInWorld.EnuRotation * relativeRotation;
-
             var geodeticPosition = GeographicCoordinateConversion.EnuToGeodetic(enuPosition, boundPoseInWorld.GeodeticPosition);
-            var geodeticRotation = Quaternion.identity;
+
             return new GeodeticPose(geodeticPosition, enuRotation);
-
-            // var enuPose = new EnuPose(enuPosition, enuRotation);
-
-            /*
-            // Convert to latitude and longitude.
-            var geodeticPosition =
-                GeographicCoordinateConversion.EnuToGeodetic(enuPosition, boundPoseInWorld.GeodeticPosition);
-            */
-
-
-            /*
-            var unityPosition = unityPose.position;
-            var unityRotation = unityPose.rotation;
-
-            // Calculates the position in the ENU coordinate of "boundPose".
-            var enuPositionVector = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPosition - boundPoseInUnity.position);
-            var enuPosition = new EnuPosition(enuPositionVector.x, enuPositionVector.z, enuPositionVector.y);
-
-            // Convert to latitude and longitude.
-            var geodeticPosition =
-                GeographicCoordinateConversion.EnuToGeodetic(enuPosition, boundPoseInWorld.GeodeticPosition);
-
-            // Calculates the rotation in the ENU coordinate of "boundPose".
-            // TODO: We should actually calculate "boundPoseInWorld.EnuRotation".
-            // Additionally, we need to calculate the rotation in the ENU coordinate of "geodeticPosition".
-            var enuRotation = Quaternion.Inverse(boundPoseInUnity.rotation) * unityRotation;
-            return new GeodeticPose(geodeticPosition, enuRotation);
-            */
         }
 
         private static bool IsDescendantOf(Transform child, Transform parent)
