@@ -18,24 +18,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem.Samples
 
         private void OnCoordinatesBound(WorldBinding worldBinding)
         {
-            Vector3 position = Vector3.zero;
-            Vector3 eulerAngles = Vector3.zero;
-
-            if (worldBinding.Transform != null)
-            {
-                position = worldBinding.Transform.position;
-                eulerAngles = worldBinding.Transform.eulerAngles;
-            }
-            else if (worldBinding.ApplicationPose.HasValue)
-            {
-                position = worldBinding.ApplicationPose.Value.position;
-                eulerAngles = worldBinding.ApplicationPose.Value.rotation.eulerAngles;
-            }
-
             var geodeticPose = worldBinding.GeodeticPose;
             var geodeticPosition = geodeticPose.GeodeticPosition;
 
             var builder = new StringBuilder();
+            var position = worldBinding.GetCurrentPosition();
+            var eulerAngles = worldBinding.GetCurrentRotation().eulerAngles;
             builder.AppendLine($"[UnityPose] Position: {position}, EnuRotation: {eulerAngles}");
             builder.AppendLine($"[GeodeticPose]");
             builder.AppendLine($"Latitude: {geodeticPosition.Latitude}");
