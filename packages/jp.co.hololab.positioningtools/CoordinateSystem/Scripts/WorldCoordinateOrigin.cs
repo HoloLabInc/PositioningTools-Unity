@@ -197,8 +197,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             if (worldBinding.Transform != null)
             {
                 // Update position by transform
-                // TODO: implement
-                geodeticPose = null;
+                geodeticPose = GetGeodeticPoseWithBoundTransform(pose, worldBinding.GeodeticPose, worldBinding.Transform);
             }
             else if (worldBinding.ApplicationPose.HasValue)
             {
@@ -215,15 +214,13 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             enuRotation = geodeticPose.EnuRotation;
         }
 
-        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPose targetPose, GeodeticPose boundPoseInWorld,
-            Pose boundPoseInUnity)
+        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPose targetPose, GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
         {
             var enuPose = GetEnuPoseWithBoundPose(targetPose, boundPoseInWorld);
             return enuPose.GetTransformedBy(boundPoseInUnity);
         }
 
-        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPosition targetPosition, GeodeticPose boundPoseInWorld,
-            Pose boundPoseInUnity)
+        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPosition targetPosition, GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
         {
             var targetPose = new GeodeticPose(targetPosition, Quaternion.identity);
             return GetUnityPoseWithBoundPoint(targetPose, boundPoseInWorld, boundPoseInUnity);
@@ -254,15 +251,24 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             return enuPose;
         }
 
-        internal static GeodeticPose GetGeodeticPoseWithBoundPoint(Pose unityPose,
-            GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
+        internal static GeodeticPose GetGeodeticPoseWithBoundPoint(Pose unityPose, GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
         {
-            var unityPosition = unityPose.position;
-            var unityRotation = unityPose.rotation;
+            var relativePosition = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPose.position - boundPoseInUnity.position);
+            var relativeRotation = unityPose.rotation * Quaternion.Inverse(boundPoseInUnity.rotation);
 
-            var relativePosition = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPosition - boundPoseInUnity.position);
-            var relativeRotation = unityRotation * Quaternion.Inverse(boundPoseInUnity.rotation);
+            return GetGeodeticPoseWithRelativePose(relativePosition, relativeRotation, boundPoseInWorld);
+        }
 
+        internal static GeodeticPose GetGeodeticPoseWithBoundTransform(Pose unityPose, GeodeticPose boundPoseInWorld, Transform boundTransformInUnity)
+        {
+            var relativePosition = boundTransformInUnity.InverseTransformPoint(unityPose.position);
+            var relativeRotation = unityPose.rotation * Quaternion.Inverse(boundTransformInUnity.rotation);
+
+            return GetGeodeticPoseWithRelativePose(relativePosition, relativeRotation, boundPoseInWorld);
+        }
+
+        private static GeodeticPose GetGeodeticPoseWithRelativePose(Vector3 relativePosition, Quaternion relativeRotation, GeodeticPose boundPoseInWorld)
+        {
             var enuPositionUnity = boundPoseInWorld.EnuRotation * relativePosition;
             var enuPosition = new EnuPosition(enuPositionUnity.x, enuPositionUnity.z, enuPositionUnity.y);
 
