@@ -114,7 +114,14 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 #if UNITY_EDITOR
         public void UpdateBinding()
         {
-            if (spaceCoordinateManager == null)
+            WorldBinding worldBinding;
+
+            var parentBinder = GetComponentInParent<WorldCoordinateBinder>();
+            if (parentBinder != null)
+            {
+                worldBinding = parentBinder.TransformWorldBinding;
+            }
+            else if (spaceCoordinateManager == null)
             {
                 spaceCoordinateManager = FindObjectOfType<CoordinateManager>();
 
@@ -122,9 +129,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 {
                     return;
                 }
+                worldBinding = spaceCoordinateManager.WorldBindingInEditor;
             }
-
-            var worldBinding = spaceCoordinateManager.WorldBindingInEditor;
+            else
+            {
+                return;
+            }
 
             switch (positionSettingMode)
             {
@@ -138,14 +148,38 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     break;
             }
         }
-
 #endif
 
         public void BindCoordinates(WorldBinding worldBinding)
         {
             var gp = geodeticPosition.ToGeodeticPosition();
             var geodeticPose = new GeodeticPose(gp, enuRotation);
-            var pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.ApplicationPose);
+
+            Pose pose;
+
+            if (worldBinding.Transform != null)
+            {
+                // Bind coordinates by transform
+                if (worldBinding.Transform.lossyScale != Vector3.one)
+                {
+                    if (IsDescendantOf(transform, worldBinding.Transform) == false)
+                    {
+                        Debug.LogWarning("When the scale of binding is not Vector3.one, WorldCoordinateOrigin should be the descendant of binding transform.");
+                    }
+                }
+
+                pose = GetUnityPoseWithBoundTransform(geodeticPose, worldBinding.GeodeticPose, worldBinding.Transform);
+            }
+            else if (worldBinding.ApplicationPose.HasValue)
+            {
+                // Bind coordinates by pose
+                pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.ApplicationPose.Value);
+            }
+            else
+            {
+                Debug.LogError($"WorldBinding should have {nameof(worldBinding.Transform)} or {nameof(worldBinding.ApplicationPose)}");
+                return;
+            }
 
             if (BindRotation)
             {
@@ -166,13 +200,56 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         private void UpdateGeodeticPositionWithCurrentPosition(WorldBinding worldBinding)
         {
             var pose = new Pose(transform.position, transform.rotation);
-            var gp = GetGeodeticPoseWithBoundPoint(pose, worldBinding.GeodeticPose, worldBinding.ApplicationPose);
-            geodeticPosition = new GeodeticPositionForInspector(gp.GeodeticPosition);
-            enuRotation = gp.EnuRotation;
+
+            GeodeticPose geodeticPose;
+
+            if (worldBinding.Transform != null)
+            {
+                // Update position by transform
+                geodeticPose = GetGeodeticPoseWithBoundTransform(pose, worldBinding.GeodeticPose, worldBinding.Transform);
+            }
+            else if (worldBinding.ApplicationPose.HasValue)
+            {
+                // Update position by pose
+                geodeticPose = GetGeodeticPoseWithBoundPoint(pose, worldBinding.GeodeticPose, worldBinding.ApplicationPose.Value);
+            }
+            else
+            {
+                Debug.LogError($"WorldBinding should have {nameof(worldBinding.Transform)} or {nameof(worldBinding.ApplicationPose)}");
+                return;
+            }
+
+            geodeticPosition = new GeodeticPositionForInspector(geodeticPose.GeodeticPosition);
+            enuRotation = geodeticPose.EnuRotation;
         }
 
-        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPose targetPose, GeodeticPose boundPoseInWorld,
-            Pose boundPoseInUnity)
+        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPose targetPose, GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
+        {
+            var enuPose = GetEnuPoseWithBoundPose(targetPose, boundPoseInWorld);
+            return enuPose.GetTransformedBy(boundPoseInUnity);
+        }
+
+        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPosition targetPosition, GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
+        {
+            var targetPose = new GeodeticPose(targetPosition, Quaternion.identity);
+            return GetUnityPoseWithBoundPoint(targetPose, boundPoseInWorld, boundPoseInUnity);
+        }
+
+        /// <summary>
+        /// Convert geodetic pose to unity pose with bound point.
+        /// </summary>
+        /// <param name="targetPose"></param>
+        /// <param name="boundPoseInWorld"></param>
+        /// <param name="boundPoseInUnity"></param>
+        /// <returns></returns>
+        internal static Pose GetUnityPoseWithBoundTransform(GeodeticPose targetPose, GeodeticPose boundPoseInWorld,
+            Transform boundTransformInUnity)
+        {
+            var enuPose = GetEnuPoseWithBoundPose(targetPose, boundPoseInWorld);
+            return enuPose.GetTransformedBy(boundTransformInUnity);
+        }
+
+        private static Pose GetEnuPoseWithBoundPose(GeodeticPose targetPose, GeodeticPose boundPoseInWorld)
         {
             // ENU position seen from the bound point.
             var enuPosition =
@@ -180,35 +257,53 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             var boundPoseInWorldRotation = Quaternion.Inverse(boundPoseInWorld.EnuRotation);
 
             var enuPose = new Pose(boundPoseInWorldRotation * enuPosition.ToUnityVector(), boundPoseInWorldRotation * targetPose.EnuRotation);
-            return enuPose.GetTransformedBy(boundPoseInUnity);
+            return enuPose;
         }
 
-        internal static Pose GetUnityPoseWithBoundPoint(GeodeticPosition targetPosition, GeodeticPose boundPoseInWorld,
-            Pose boundPoseInUnity)
+        internal static GeodeticPose GetGeodeticPoseWithBoundPoint(Pose unityPose, GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
         {
-            var targetPose = new GeodeticPose(targetPosition, Quaternion.identity);
-            return GetUnityPoseWithBoundPoint(targetPose, boundPoseInWorld, boundPoseInUnity);
+            var relativePosition = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPose.position - boundPoseInUnity.position);
+            var relativeRotation = unityPose.rotation * Quaternion.Inverse(boundPoseInUnity.rotation);
+
+            return GetGeodeticPoseWithRelativePose(relativePosition, relativeRotation, boundPoseInWorld);
         }
 
-        internal static GeodeticPose GetGeodeticPoseWithBoundPoint(Pose unityPose,
-            GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
+        internal static GeodeticPose GetGeodeticPoseWithBoundTransform(Pose unityPose, GeodeticPose boundPoseInWorld, Transform boundTransformInUnity)
         {
-            var unityPosition = unityPose.position;
-            var unityRotation = unityPose.rotation;
+            var relativePosition = boundTransformInUnity.InverseTransformPoint(unityPose.position);
+            var relativeRotation = unityPose.rotation * Quaternion.Inverse(boundTransformInUnity.rotation);
 
-            // Calculates the position in the ENU coordinate of "boundPose".
-            var enuPositionVector = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPosition - boundPoseInUnity.position);
-            var enuPosition = new EnuPosition(enuPositionVector.x, enuPositionVector.z, enuPositionVector.y);
+            return GetGeodeticPoseWithRelativePose(relativePosition, relativeRotation, boundPoseInWorld);
+        }
 
-            // Convert to latitude and longitude.
-            var geodeticPosition =
-                GeographicCoordinateConversion.EnuToGeodetic(enuPosition, boundPoseInWorld.GeodeticPosition);
+        private static GeodeticPose GetGeodeticPoseWithRelativePose(Vector3 relativePosition, Quaternion relativeRotation, GeodeticPose boundPoseInWorld)
+        {
+            var enuPositionUnity = boundPoseInWorld.EnuRotation * relativePosition;
+            var enuPosition = new EnuPosition(enuPositionUnity.x, enuPositionUnity.z, enuPositionUnity.y);
 
-            // Calculates the rotation in the ENU coordinate of "boundPose".
-            // TODO: We should actually calculate "boundPoseInWorld.EnuRotation".
-            // Additionally, we need to calculate the rotation in the ENU coordinate of "geodeticPosition".
-            var enuRotation = Quaternion.Inverse(boundPoseInUnity.rotation) * unityRotation;
+            var enuRotation = boundPoseInWorld.EnuRotation * relativeRotation;
+            var geodeticPosition = GeographicCoordinateConversion.EnuToGeodetic(enuPosition, boundPoseInWorld.GeodeticPosition);
+
             return new GeodeticPose(geodeticPosition, enuRotation);
+        }
+
+        private static bool IsDescendantOf(Transform child, Transform parent)
+        {
+            if (child == null || parent == null)
+            {
+                return false;
+            }
+
+            Transform current = child;
+            while (current != null)
+            {
+                if (current == parent)
+                {
+                    return true;
+                }
+                current = current.parent;
+            }
+            return false;
         }
 
 #if UNITY_EDITOR

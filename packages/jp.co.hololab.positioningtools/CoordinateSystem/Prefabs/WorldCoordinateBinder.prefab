@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1932592257299019688}
   - component: {fileID: 1932592257299019689}
   m_Layer: 0
-  m_Name: WorldCoordinateBinderForEditor
+  m_Name: WorldCoordinateBinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

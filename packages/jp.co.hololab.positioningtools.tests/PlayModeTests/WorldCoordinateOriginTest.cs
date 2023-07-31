@@ -73,5 +73,36 @@ namespace Tests
                 Assert.That(pose.rotation, Is.EqualTo(Quaternion.identity).Using(QuaternionEqualityComparer.Instance));
             }
         }
+
+        [Test]
+        public void ConvertGeodeticPoseToUnityPoseAndConvertUnityPoseToGeodeticPose_GeodeticPoseIsEuqual()
+        {
+            var testCases = new List<(Vector3 BoundPosition, Quaternion BoundRotation)>()
+            {
+                (Vector3.zero, Quaternion.identity),
+                (new Vector3(1, 2, 3), Quaternion.Euler(10, 20, 30))
+            };
+
+            foreach (var testCase in testCases)
+            {
+                var boundPoseInUnity = new Pose(testCase.BoundPosition, testCase.BoundRotation);
+
+                var geodeticPose = new GeodeticPose(new GeodeticPosition(0.1, 0.2, 0.3), Quaternion.Euler(5, 6, 7));
+
+                var targetPosition = new GeodeticPosition(0.1001, 0.2001, 0.5);
+                var targetRotation = Quaternion.Euler(1, 2, 3);
+                var targetPose = new GeodeticPose(targetPosition, targetRotation);
+
+                var poseInUnity = WorldCoordinateOrigin.GetUnityPoseWithBoundPoint(targetPose, geodeticPose, boundPoseInUnity);
+                var convertedGeodeticPose = WorldCoordinateOrigin.GetGeodeticPoseWithBoundPoint(poseInUnity, geodeticPose, boundPoseInUnity);
+
+                var epsilon = 0.000000001;
+                Assert.That(convertedGeodeticPose.GeodeticPosition.Latitude, Is.EqualTo(targetPose.GeodeticPosition.Latitude).Within(epsilon));
+                Assert.That(convertedGeodeticPose.GeodeticPosition.Longitude, Is.EqualTo(targetPose.GeodeticPosition.Longitude).Within(epsilon));
+
+                var heightEpsilon = 0.0001;
+                Assert.That(convertedGeodeticPose.GeodeticPosition.EllipsoidalHeight, Is.EqualTo(targetPose.GeodeticPosition.EllipsoidalHeight).Within(heightEpsilon));
+            }
+        }
     }
 }
