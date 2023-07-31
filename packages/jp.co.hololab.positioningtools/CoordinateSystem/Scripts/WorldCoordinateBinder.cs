@@ -4,9 +4,9 @@ using UnityEngine;
 namespace HoloLab.PositioningTools.CoordinateSystem
 {
     /// <summary>
-    /// A component for binding between Unity coordinates and geographic coordinates to debug in Unty Editor.
+    /// A component for binding between Unity coordinates and geographic coordinates.
     /// </summary>
-    public class WorldCoordinateBinderForEditor : BinderComponentBase
+    public class WorldCoordinateBinder : BinderComponentBase
     {
         [SerializeField]
         [Tooltip("latitude/longitude/height")]
