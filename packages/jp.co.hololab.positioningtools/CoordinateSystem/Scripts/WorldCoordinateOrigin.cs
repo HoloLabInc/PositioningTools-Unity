@@ -145,6 +145,25 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
 #endif
 
+        private static bool IsDescendantOf(Transform child, Transform parent)
+        {
+            if (child == null || parent == null)
+            {
+                return false;
+            }
+
+            Transform current = child;
+            while (current != null)
+            {
+                if (current == parent)
+                {
+                    return true;
+                }
+                current = current.parent;
+            }
+            return false;
+        }
+
         public void BindCoordinates(WorldBinding worldBinding)
         {
             var gp = geodeticPosition.ToGeodeticPosition();
@@ -153,10 +172,19 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             // Bind coordinates by transform
             if (worldBinding.Transform != null)
             {
+                if (worldBinding.Transform.lossyScale != Vector3.one)
+                {
+                    if (IsDescendantOf(transform, worldBinding.Transform) == false)
+                    {
+                        Debug.LogWarning("When the scale of binding is not Vector3.one, WorldCoordinateOrigin should be the descendant of binding transform.");
+                    }
+                }
+
                 Debug.LogWarning("implement");
                 // TODO: implement
                 var pose = GetUnityPoseWithBoundTransform(geodeticPose, worldBinding.GeodeticPose, worldBinding.Transform);
 
+                // TODO: refactor
                 if (BindRotation)
                 {
                     transform.SetPositionAndRotation(pose.position, pose.rotation);
@@ -183,6 +211,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 }
             }
         }
+
 
         private void OnCoordinatesBound(WorldBinding worldBinding)
         {
