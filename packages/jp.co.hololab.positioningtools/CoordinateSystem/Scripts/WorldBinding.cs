@@ -34,5 +34,37 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             Transform = transform;
             GeodeticPose = geodeticPose;
         }
+
+        public Vector3 GetCurrentPosition()
+        {
+            if (ApplicationPose.HasValue)
+            {
+                return ApplicationPose.Value.position;
+            }
+            else if (Transform != null)
+            {
+                return Transform.position;
+            }
+            else
+            {
+                return Vector3.zero;
+            }
+        }
+
+        public Quaternion GetCurrentRotation()
+        {
+            if (ApplicationPose.HasValue)
+            {
+                return ApplicationPose.Value.rotation;
+            }
+            else if (Transform != null)
+            {
+                return Transform.rotation;
+            }
+            else
+            {
+                return Quaternion.identity;
+            }
+        }
     }
 }

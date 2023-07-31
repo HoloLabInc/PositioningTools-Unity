@@ -169,9 +169,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             var gp = geodeticPosition.ToGeodeticPosition();
             var geodeticPose = new GeodeticPose(gp, enuRotation);
 
-            // Bind coordinates by transform
+            Pose pose;
+
             if (worldBinding.Transform != null)
             {
+                // Bind coordinates by transform
                 if (worldBinding.Transform.lossyScale != Vector3.one)
                 {
                     if (IsDescendantOf(transform, worldBinding.Transform) == false)
@@ -180,38 +182,28 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     }
                 }
 
-                Debug.LogWarning("implement");
-                // TODO: implement
-                var pose = GetUnityPoseWithBoundTransform(geodeticPose, worldBinding.GeodeticPose, worldBinding.Transform);
-
-                // TODO: refactor
-                if (BindRotation)
-                {
-                    transform.SetPositionAndRotation(pose.position, pose.rotation);
-                }
-                else
-                {
-                    transform.position = pose.position;
-                }
+                pose = GetUnityPoseWithBoundTransform(geodeticPose, worldBinding.GeodeticPose, worldBinding.Transform);
+            }
+            else if (worldBinding.ApplicationPose.HasValue)
+            {
+                // Bind coordinates by pose
+                pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.ApplicationPose.Value);
+            }
+            else
+            {
+                Debug.LogError($"WorldBinding should have {nameof(worldBinding.Transform)} or {nameof(worldBinding.ApplicationPose)}");
                 return;
             }
 
-            // Bind coordinates by pose
-            if (worldBinding.ApplicationPose.HasValue)
+            if (BindRotation)
             {
-                var pose = GetUnityPoseWithBoundPoint(geodeticPose, worldBinding.GeodeticPose, worldBinding.ApplicationPose.Value);
-
-                if (BindRotation)
-                {
-                    transform.SetPositionAndRotation(pose.position, pose.rotation);
-                }
-                else
-                {
-                    transform.position = pose.position;
-                }
+                transform.SetPositionAndRotation(pose.position, pose.rotation);
+            }
+            else
+            {
+                transform.position = pose.position;
             }
         }
-
 
         private void OnCoordinatesBound(WorldBinding worldBinding)
         {
