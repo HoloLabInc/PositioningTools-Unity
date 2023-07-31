@@ -37,6 +37,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             set
             {
                 geodeticPosition = new GeodeticPositionForInspector(value);
+
+                // Update transform
+                BindCoordinates(latestWorldBinding);
             }
             get
             {
@@ -53,6 +56,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             set
             {
                 enuRotation = value;
+
+                // Update transform
+                BindCoordinates(latestWorldBinding);
             }
             get
             {
@@ -66,6 +72,8 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         public bool BindRotation { get; set; } = true;
 
         private CoordinateManager coordinateManager;
+
+        private WorldBinding latestWorldBinding;
 
         public enum PositionSettingModeType
         {
@@ -84,23 +92,34 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             coordinateManager.OnCoordinatesBound += OnCoordinatesBound;
             gameObject.SetActive(false);
 
-            var latestWorldBinding = coordinateManager.LatestWorldBinding;
-            if (latestWorldBinding != null)
+            if (coordinateManager.LatestWorldBinding != null)
             {
-                OnCoordinatesBound(latestWorldBinding);
+                OnCoordinatesBound(coordinateManager.LatestWorldBinding);
             }
         }
 
-#if UNITY_EDITOR
         private void Update()
         {
+            if (Application.isPlaying)
+            {
+                if (transform.hasChanged)
+                {
+                    if (latestWorldBinding != null)
+                    {
+                        SyncGeodeticPoseAndUnityPose(latestWorldBinding);
+                    }
+                    transform.hasChanged = false;
+                }
+            }
+
+#if UNITY_EDITOR
             // Update position in Edit mode.
             if (!Application.isPlaying)
             {
-                UpdateBinding();
+                UpdateBindingInEditMode();
             }
-        }
 #endif
+        }
 
         private void OnDestroy()
         {
@@ -112,7 +131,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         }
 
 #if UNITY_EDITOR
-        public void UpdateBinding()
+        private void UpdateBindingInEditMode()
         {
             WorldBinding worldBinding;
 
@@ -136,6 +155,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 return;
             }
 
+            SyncGeodeticPoseAndUnityPose(worldBinding);
+        }
+#endif
+
+        private void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding)
+        {
             switch (positionSettingMode)
             {
                 case PositionSettingModeType.Transform:
@@ -148,10 +173,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     break;
             }
         }
-#endif
 
         public void BindCoordinates(WorldBinding worldBinding)
         {
+            latestWorldBinding = worldBinding;
+
             var gp = geodeticPosition.ToGeodeticPosition();
             var geodeticPose = new GeodeticPose(gp, enuRotation);
 
