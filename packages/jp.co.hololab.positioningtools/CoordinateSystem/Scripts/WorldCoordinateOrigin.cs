@@ -37,6 +37,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             set
             {
                 geodeticPosition = new GeodeticPositionForInspector(value);
+
+                // Update transform
+                BindCoordinates(latestWorldBinding);
             }
             get
             {
@@ -53,6 +56,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             set
             {
                 enuRotation = value;
+
+                // Update transform
+                BindCoordinates(latestWorldBinding);
             }
             get
             {
