@@ -65,7 +65,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         /// </summary>
         public bool BindRotation { get; set; } = true;
 
-        private CoordinateManager spaceCoordinateManager;
+        private CoordinateManager coordinateManager;
 
         public enum PositionSettingModeType
         {
@@ -80,11 +80,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 return;
             }
 
-            spaceCoordinateManager = CoordinateManager.Instance;
-            spaceCoordinateManager.OnCoordinatesBound += OnCoordinatesBound;
+            coordinateManager = CoordinateManager.Instance;
+            coordinateManager.OnCoordinatesBound += OnCoordinatesBound;
             gameObject.SetActive(false);
 
-            var latestWorldBinding = spaceCoordinateManager.LatestWorldBinding;
+            var latestWorldBinding = coordinateManager.LatestWorldBinding;
             if (latestWorldBinding != null)
             {
                 OnCoordinatesBound(latestWorldBinding);
@@ -108,7 +108,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 return;
             }
-            spaceCoordinateManager.OnCoordinatesBound -= OnCoordinatesBound;
+            coordinateManager.OnCoordinatesBound -= OnCoordinatesBound;
         }
 
 #if UNITY_EDITOR
@@ -121,15 +121,15 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 worldBinding = parentBinder.TransformWorldBinding;
             }
-            else if (spaceCoordinateManager == null)
+            else if (coordinateManager == null)
             {
-                spaceCoordinateManager = FindObjectOfType<CoordinateManager>();
+                coordinateManager = FindObjectOfType<CoordinateManager>();
 
-                if (spaceCoordinateManager == null)
+                if (coordinateManager == null)
                 {
                     return;
                 }
-                worldBinding = spaceCoordinateManager.WorldBindingInEditor;
+                worldBinding = coordinateManager.WorldBindingInEditor;
             }
             else
             {
