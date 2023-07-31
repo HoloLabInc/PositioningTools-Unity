@@ -8,16 +8,8 @@ using UnityEditor;
 
 namespace HoloLab.PositioningTools.CoordinateSystem
 {
-    public class SpaceBinder : MonoBehaviour
+    public class SpaceBinder : BinderComponentBase
     {
-        private enum RuntimeType
-        {
-            None = 0,
-            Editor = 1,
-            Player = 2,
-            EditorAndPlayer = 3,
-        }
-
 #pragma warning disable CS0414
         [SerializeField]
         private bool customSpace = false;
@@ -29,9 +21,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         [SerializeField]
         private string spaceId;
 
-        [SerializeField]
-        private RuntimeType runtimeType = RuntimeType.Editor;
-
         private void Start()
         {
             if (IsBindingValid())
@@ -40,29 +29,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 var manager = CoordinateManager.Instance;
                 manager.BindSpace(spaceBinding);
             }
-        }
-
-        private bool IsBindingValid()
-        {
-#if UNITY_EDITOR
-            switch (runtimeType)
-            {
-                case RuntimeType.Editor:
-                case RuntimeType.EditorAndPlayer:
-                    return true;
-                default:
-                    return false;
-            }
-#else
-            switch (runtimeType)
-            {
-                case RuntimeType.Player:
-                case RuntimeType.EditorAndPlayer:
-                    return true;
-                default:
-                    return false;
-            }
-#endif
         }
 
 #if UNITY_EDITOR
