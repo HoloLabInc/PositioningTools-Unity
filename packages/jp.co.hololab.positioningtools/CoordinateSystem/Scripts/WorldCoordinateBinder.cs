@@ -16,6 +16,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         [SerializeField]
         private float northHeading;
 
+        [SerializeField]
+        private bool updateBindingWhenTransformChanged;
+
         public GeodeticPosition GeodeticPosition
         {
             get
@@ -57,6 +60,15 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         private void Start()
         {
             BindIfBindingValid();
+        }
+
+        private void Update()
+        {
+            if (updateBindingWhenTransformChanged && transform.hasChanged)
+            {
+                BindIfBindingValid();
+                transform.hasChanged = false;
+            }
         }
 
         private void BindIfBindingValid()
