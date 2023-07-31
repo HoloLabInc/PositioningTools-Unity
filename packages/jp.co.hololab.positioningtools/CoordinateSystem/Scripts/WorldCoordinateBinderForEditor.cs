@@ -19,18 +19,13 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             if (IsBindingValid())
             {
-                StartCoroutine(Bind());
+                Bind();
             }
         }
 
-        private IEnumerator Bind()
+        private void Bind()
         {
-
-            // Delay by one frame to wait for event registration.
-            yield return null;
-
             var spaceCoordinateManager = CoordinateManager.Instance;
-            // var pose = new Pose(transform.position, transform.rotation);
             var gPosition = this.geodeticPosition.ToGeodeticPosition();
             var rotation = Quaternion.AngleAxis(northHeading, Vector3.up);
             var gPose = new GeodeticPose(gPosition, rotation);

@@ -66,7 +66,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         public bool BindRotation { get; set; } = true;
 
         private CoordinateManager spaceCoordinateManager;
-        private ScalableWorldCoordinateBinder parentBinder;
 
         public enum PositionSettingModeType
         {
@@ -80,9 +79,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 return;
             }
-
-            // find parent ScalableWorldCoordinateBinder
-            parentBinder = GetComponentInParent<ScalableWorldCoordinateBinder>();
 
             spaceCoordinateManager = CoordinateManager.Instance;
             spaceCoordinateManager.OnCoordinatesBound += OnCoordinatesBound;
