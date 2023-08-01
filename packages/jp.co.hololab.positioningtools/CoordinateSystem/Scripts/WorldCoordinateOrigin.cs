@@ -176,6 +176,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         public void BindCoordinates(WorldBinding worldBinding)
         {
+            if (worldBinding == null)
+            {
+                return;
+            }
+
             latestWorldBinding = worldBinding;
 
             var gp = geodeticPosition.ToGeodeticPosition();
