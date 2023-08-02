@@ -38,7 +38,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             private SerializedProperty spaceTypeProperty;
             private SerializedProperty customSpaceProperty;
             private SerializedProperty spaceIdProperty;
-            private SerializedProperty runtimeTypeProperty;
+            private SerializedProperty runtimeModeProperty;
 
             protected static string[] spaceTypeOptions = new string[]
             {
@@ -61,7 +61,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 spaceTypeProperty = serializedObject.FindProperty(nameof(spaceType));
                 customSpaceProperty = serializedObject.FindProperty(nameof(customSpace));
                 spaceIdProperty = serializedObject.FindProperty(nameof(spaceId));
-                runtimeTypeProperty = serializedObject.FindProperty(nameof(runtimeType));
+                runtimeModeProperty = serializedObject.FindProperty(nameof(runtimeMode));
             }
 
             public override void OnInspectorGUI()
@@ -104,7 +104,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 EditorGUILayout.PropertyField(spaceIdProperty);
 
                 // Show runtime type select box
-                runtimeTypeProperty.enumValueIndex = EditorGUILayout.Popup("Runtime Type", runtimeTypeProperty.enumValueIndex, runtimeTypeOptions);
+                runtimeModeProperty.enumValueIndex = EditorGUILayout.Popup("Runtime Mode", runtimeModeProperty.enumValueIndex, runtimeTypeOptions);
 
                 serializedObject.ApplyModifiedProperties();
             }

@@ -1,12 +1,13 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace HoloLab.PositioningTools.CoordinateSystem
 {
     public class BinderComponentBase : MonoBehaviour
     {
-        protected enum RuntimeType
+        public enum RuntimeModeType
         {
             None = 0,
             Editor = 1,
@@ -15,24 +16,37 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         }
 
         [SerializeField]
-        protected RuntimeType runtimeType = RuntimeType.Editor;
+        [FormerlySerializedAs("runtimeType")]
+        protected RuntimeModeType runtimeMode = RuntimeModeType.Editor;
+
+        public RuntimeModeType RuntimeMode
+        {
+            get
+            {
+                return runtimeMode;
+            }
+            set
+            {
+                runtimeMode = value;
+            }
+        }
 
         protected bool IsBindingValid()
         {
 #if UNITY_EDITOR
-            switch (runtimeType)
+            switch (runtimeMode)
             {
-                case RuntimeType.Editor:
-                case RuntimeType.EditorAndPlayer:
+                case RuntimeModeType.Editor:
+                case RuntimeModeType.EditorAndPlayer:
                     return true;
                 default:
                     return false;
             }
 #else
-            switch (runtimeType)
+            switch (runtimeMode)
             {
-                case RuntimeType.Player:
-                case RuntimeType.EditorAndPlayer:
+                case RuntimeModeType.Player:
+                case RuntimeModeType.EditorAndPlayer:
                     return true;
                 default:
                     return false;

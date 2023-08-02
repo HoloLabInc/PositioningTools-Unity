@@ -45,6 +45,18 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
         }
 
+        public bool UpdateBindingWhenTransformChanged
+        {
+            get
+            {
+                return updateBindingWhenTransformChanged;
+            }
+            set
+            {
+                updateBindingWhenTransformChanged = value;
+            }
+        }
+
         public WorldBinding TransformWorldBinding
         {
             get
