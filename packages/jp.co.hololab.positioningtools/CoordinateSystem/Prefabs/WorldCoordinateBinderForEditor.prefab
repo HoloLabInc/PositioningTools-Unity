@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5949661558885488348
+--- !u!1 &1932592257299019690
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5949661558885488350}
-  - component: {fileID: 5949661558885488351}
+  - component: {fileID: 1932592257299019688}
+  - component: {fileID: 1932592257299019689}
   m_Layer: 0
-  m_Name: SpaceBinder
+  m_Name: WorldCoordinateBinderForEditor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5949661558885488350
+--- !u!4 &1932592257299019688
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5949661558885488348}
+  m_GameObject: {fileID: 1932592257299019690}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,19 +31,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5949661558885488351
+--- !u!114 &1932592257299019689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5949661558885488348}
+  m_GameObject: {fileID: 1932592257299019690}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9aebbcd59c37604683308f2585f11f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 64609f5c633d4b7e8c35d5bfd88eb650, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeMode: 3
-  customSpace: 1
-  spaceType: 
-  spaceId: 
+  runtimeMode: 1
+  geodeticPosition:
+    latitude: 0
+    longitude: 0
+    ellipsoidalHeight: 0
+  northHeading: 0
+  updateBindingWhenTransformChanged: 0

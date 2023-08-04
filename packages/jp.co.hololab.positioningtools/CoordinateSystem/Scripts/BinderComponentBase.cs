@@ -17,7 +17,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         [SerializeField]
         [FormerlySerializedAs("runtimeType")]
-        protected RuntimeModeType runtimeMode = RuntimeModeType.Editor;
+        protected RuntimeModeType runtimeMode = RuntimeModeType.EditorAndPlayer;
 
         public RuntimeModeType RuntimeMode
         {

@@ -43,7 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64609f5c633d4b7e8c35d5bfd88eb650, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runtimeMode: 3
   geodeticPosition:
     latitude: 0
     longitude: 0
-    height: 0
+    ellipsoidalHeight: 0
+  northHeading: 0
+  updateBindingWhenTransformChanged: 0
