@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5949661558885488350}
   - component: {fileID: 5949661558885488351}
   m_Layer: 0
-  m_Name: SpaceBinder
+  m_Name: SpaceBinderForEditor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9aebbcd59c37604683308f2585f11f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeMode: 3
   customSpace: 1
   spaceType: 
   spaceId: 
+  runtimeType: 1
