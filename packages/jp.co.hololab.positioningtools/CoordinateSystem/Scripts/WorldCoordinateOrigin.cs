@@ -169,6 +169,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
         }
 
+        [Obsolete("This method is obsolete.")]
+        public void BindCoordinates(WorldBinding worldBinding)
+        {
+            UpdateTransformWithGeodeticPosition(worldBinding);
+        }
+
 #if UNITY_EDITOR
         private void UpdateBindingInEditMode()
         {
@@ -231,12 +237,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     break;
                 case PositionSettingModeType.GeodeticPosition:
                     // If in "lat/lon to transform" mode, update transform.
-                    BindCoordinates(worldBinding);
+                    UpdateTransformWithGeodeticPosition(worldBinding);
                     break;
             }
         }
 
-        private void BindCoordinates(WorldBinding worldBinding)
+        private void UpdateTransformWithGeodeticPosition(WorldBinding worldBinding)
         {
             if (worldBinding == null)
             {
