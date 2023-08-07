@@ -14,13 +14,24 @@ namespace HoloLab.PositioningTools.CoordinateSystem
     public class WorldCoordinateOrigin : MonoBehaviour
     {
         [SerializeField]
-        private PositionSettingModeType positionSettingMode;
+        private PositionSettingModeType positionSettingMode = PositionSettingModeType.GeodeticPosition;
 
         public PositionSettingModeType PositionSettingMode
         {
             set
             {
+                if (positionSettingMode == value)
+                {
+                    return;
+                }
+
+                var previousMode = positionSettingMode;
                 positionSettingMode = value;
+
+                if (previousMode == PositionSettingModeType.Transform)
+                {
+                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
+                }
             }
             get
             {
@@ -39,10 +50,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 geodeticPosition = new GeodeticPositionForInspector(value);
 
                 // Update transform
-                BindCoordinates(latestWorldBinding);
+                SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.GeodeticPosition);
             }
             get
             {
+                // TODO update if changed
                 return geodeticPosition.ToGeodeticPosition();
             }
         }
@@ -58,10 +70,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 enuRotation = value;
 
                 // Update transform
-                BindCoordinates(latestWorldBinding);
+                SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.GeodeticPosition);
             }
             get
             {
+                // TODO update if changed
                 return enuRotation;
             }
         }
@@ -74,6 +87,22 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         private CoordinateManager coordinateManager;
 
         private WorldBinding latestWorldBinding;
+
+        private WorldBinding GetLatestWorldBinding()
+        {
+            if (latestWorldBinding != null)
+            {
+                return latestWorldBinding;
+            }
+
+            var coordinateManager = CoordinateManager.Instance;
+            if (coordinateManager != null)
+            {
+                return coordinateManager.LatestWorldBinding;
+            }
+
+            return null;
+        }
 
         public enum PositionSettingModeType
         {
@@ -92,9 +121,10 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             coordinateManager.OnCoordinatesBound += OnCoordinatesBound;
             gameObject.SetActive(false);
 
-            if (coordinateManager.LatestWorldBinding != null)
+            var worldBinding = GetLatestWorldBinding();
+            if (worldBinding != null)
             {
-                OnCoordinatesBound(coordinateManager.LatestWorldBinding);
+                OnCoordinatesBound(worldBinding);
             }
         }
 
@@ -159,9 +189,17 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         }
 #endif
 
-        private void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding)
+        internal void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding)
         {
-            switch (positionSettingMode)
+            SyncGeodeticPoseAndUnityPose(worldBinding, positionSettingMode);
+        }
+
+        internal void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding, PositionSettingModeType syncMode)
+        {
+            latestWorldBinding = worldBinding;
+
+            //switch (positionSettingMode)
+            switch (syncMode)
             {
                 case PositionSettingModeType.Transform:
                     // If in "transform to lat/lon" mode, update latitude and longitude、
@@ -174,14 +212,14 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
         }
 
-        public void BindCoordinates(WorldBinding worldBinding)
+        private void BindCoordinates(WorldBinding worldBinding)
         {
             if (worldBinding == null)
             {
                 return;
             }
 
-            latestWorldBinding = worldBinding;
+            // latestWorldBinding = worldBinding;
 
             var gp = geodeticPosition.ToGeodeticPosition();
             var geodeticPose = new GeodeticPose(gp, enuRotation);
@@ -224,12 +262,18 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         private void OnCoordinatesBound(WorldBinding worldBinding)
         {
-            BindCoordinates(worldBinding);
+            // BindCoordinates(worldBinding);
+            SyncGeodeticPoseAndUnityPose(worldBinding);
             gameObject.SetActive(true);
         }
 
         private void UpdateGeodeticPositionWithCurrentPosition(WorldBinding worldBinding)
         {
+            if (worldBinding == null)
+            {
+                return;
+            }
+
             var pose = new Pose(transform.position, transform.rotation);
 
             GeodeticPose geodeticPose;

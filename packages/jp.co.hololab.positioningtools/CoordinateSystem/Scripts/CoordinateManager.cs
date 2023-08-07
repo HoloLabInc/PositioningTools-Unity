@@ -102,7 +102,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     var worldCoordinateOrigins = FindObjectsOfType<WorldCoordinateOrigin>();
                     foreach (var worldCoordinateOrigin in worldCoordinateOrigins)
                     {
-                        worldCoordinateOrigin.BindCoordinates(worldBinding);
+                        worldCoordinateOrigin.SyncGeodeticPoseAndUnityPose(worldBinding);
                     }
                 }
             }
