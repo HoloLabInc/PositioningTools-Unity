@@ -54,7 +54,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
             get
             {
-                // TODO update if changed
+                // Update geodeticPosition
+                if (positionSettingMode == PositionSettingModeType.Transform)
+                {
+                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
+                }
+
                 return geodeticPosition.ToGeodeticPosition();
             }
         }
@@ -74,7 +79,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
             get
             {
-                // TODO update if changed
+                // Update enuRotation
+                if (positionSettingMode == PositionSettingModeType.Transform)
+                {
+                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
+                }
+
                 return enuRotation;
             }
         }
