@@ -104,5 +104,30 @@ namespace Tests
                 Assert.That(convertedGeodeticPose.GeodeticPosition.EllipsoidalHeight, Is.EqualTo(targetPose.GeodeticPosition.EllipsoidalHeight).Within(heightEpsilon));
             }
         }
+
+        [Test]
+        public void EnuRotationIsSetInTransformMode_GeodeticPositionUpdated()
+        {
+            var coordinateManagerGameObject = new GameObject();
+            coordinateManagerGameObject.AddComponent<CoordinateManager>();
+
+            var binderGameObject = new GameObject();
+            var binder = binderGameObject.AddComponent<WorldCoordinateBinder>();
+            binder.GeodeticPosition = new GeodeticPosition(0.1, 0.2, 0);
+
+            var go = new GameObject();
+            var origin = go.AddComponent<WorldCoordinateOrigin>();
+            origin.PositionSettingMode = WorldCoordinateOrigin.PositionSettingModeType.Transform;
+            var height = 2;
+            origin.transform.position = height * Vector3.up;
+
+            origin.EnuRotation = Quaternion.AngleAxis(10, Vector3.right);
+
+            Assert.That(origin.GeodeticPosition.EllipsoidalHeight, Is.EqualTo(height));
+
+            GameObject.Destroy(go);
+            GameObject.Destroy(binderGameObject);
+            GameObject.Destroy(coordinateManagerGameObject);
+        }
     }
 }

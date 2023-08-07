@@ -47,6 +47,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             set
             {
+                if (positionSettingMode == PositionSettingModeType.Transform)
+                {
+                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
+                }
+
                 geodeticPosition = new GeodeticPositionForInspector(value);
 
                 // Update transform
@@ -72,6 +77,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             set
             {
+                if (positionSettingMode == PositionSettingModeType.Transform)
+                {
+                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
+                }
+
                 enuRotation = value;
 
                 // Update transform
@@ -152,7 +162,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 return;
             }
-            coordinateManager.OnCoordinatesBound -= OnCoordinatesBound;
+
+            if (coordinateManager != null)
+            {
+                coordinateManager.OnCoordinatesBound -= OnCoordinatesBound;
+            }
         }
 
 #if UNITY_EDITOR
