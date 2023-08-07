@@ -14,13 +14,24 @@ namespace HoloLab.PositioningTools.CoordinateSystem
     public class WorldCoordinateOrigin : MonoBehaviour
     {
         [SerializeField]
-        private PositionSettingModeType positionSettingMode;
+        private PositionSettingModeType positionSettingMode = PositionSettingModeType.GeodeticPosition;
 
         public PositionSettingModeType PositionSettingMode
         {
             set
             {
+                if (positionSettingMode == value)
+                {
+                    return;
+                }
+
+                var previousMode = positionSettingMode;
                 positionSettingMode = value;
+
+                if (previousMode == PositionSettingModeType.Transform)
+                {
+                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
+                }
             }
             get
             {
@@ -36,16 +47,21 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             set
             {
+                UpdateGeodeticPoseInTransformMode();
+
                 geodeticPosition = new GeodeticPositionForInspector(value);
 
                 // Update transform
-                BindCoordinates(latestWorldBinding);
+                SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.GeodeticPosition);
             }
             get
             {
+                UpdateGeodeticPoseInTransformMode();
+
                 return geodeticPosition.ToGeodeticPosition();
             }
         }
+
 
         [SerializeField]
         [Tooltip("Rotation in ENU coordinates")]
@@ -55,13 +71,16 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             set
             {
+                UpdateGeodeticPoseInTransformMode();
+
                 enuRotation = value;
 
                 // Update transform
-                BindCoordinates(latestWorldBinding);
+                SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.GeodeticPosition);
             }
             get
             {
+                UpdateGeodeticPoseInTransformMode();
                 return enuRotation;
             }
         }
@@ -92,9 +111,10 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             coordinateManager.OnCoordinatesBound += OnCoordinatesBound;
             gameObject.SetActive(false);
 
-            if (coordinateManager.LatestWorldBinding != null)
+            var worldBinding = GetLatestWorldBinding();
+            if (worldBinding != null)
             {
-                OnCoordinatesBound(coordinateManager.LatestWorldBinding);
+                OnCoordinatesBound(worldBinding);
             }
         }
 
@@ -127,7 +147,17 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 return;
             }
-            coordinateManager.OnCoordinatesBound -= OnCoordinatesBound;
+
+            if (coordinateManager != null)
+            {
+                coordinateManager.OnCoordinatesBound -= OnCoordinatesBound;
+            }
+        }
+
+        [Obsolete("This method is obsolete.")]
+        public void BindCoordinates(WorldBinding worldBinding)
+        {
+            UpdateTransformWithGeodeticPosition(worldBinding);
         }
 
 #if UNITY_EDITOR
@@ -159,9 +189,33 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         }
 #endif
 
-        private void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding)
+        private WorldBinding GetLatestWorldBinding()
         {
-            switch (positionSettingMode)
+            if (latestWorldBinding != null)
+            {
+                return latestWorldBinding;
+            }
+
+            var coordinateManager = CoordinateManager.Instance;
+            if (coordinateManager != null)
+            {
+                return coordinateManager.LatestWorldBinding;
+            }
+
+            return null;
+        }
+
+
+        internal void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding)
+        {
+            SyncGeodeticPoseAndUnityPose(worldBinding, positionSettingMode);
+        }
+
+        internal void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding, PositionSettingModeType syncMode)
+        {
+            latestWorldBinding = worldBinding;
+
+            switch (syncMode)
             {
                 case PositionSettingModeType.Transform:
                     // If in "transform to lat/lon" mode, update latitude and longitude、
@@ -169,19 +223,25 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     break;
                 case PositionSettingModeType.GeodeticPosition:
                     // If in "lat/lon to transform" mode, update transform.
-                    BindCoordinates(worldBinding);
+                    UpdateTransformWithGeodeticPosition(worldBinding);
                     break;
             }
         }
 
-        public void BindCoordinates(WorldBinding worldBinding)
+        private void UpdateGeodeticPoseInTransformMode()
+        {
+            if (positionSettingMode == PositionSettingModeType.Transform)
+            {
+                SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
+            }
+        }
+
+        private void UpdateTransformWithGeodeticPosition(WorldBinding worldBinding)
         {
             if (worldBinding == null)
             {
                 return;
             }
-
-            latestWorldBinding = worldBinding;
 
             var gp = geodeticPosition.ToGeodeticPosition();
             var geodeticPose = new GeodeticPose(gp, enuRotation);
@@ -224,12 +284,17 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         private void OnCoordinatesBound(WorldBinding worldBinding)
         {
-            BindCoordinates(worldBinding);
+            SyncGeodeticPoseAndUnityPose(worldBinding);
             gameObject.SetActive(true);
         }
 
         private void UpdateGeodeticPositionWithCurrentPosition(WorldBinding worldBinding)
         {
+            if (worldBinding == null)
+            {
+                return;
+            }
+
             var pose = new Pose(transform.position, transform.rotation);
 
             GeodeticPose geodeticPose;
