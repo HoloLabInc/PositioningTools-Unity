@@ -47,10 +47,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             set
             {
-                if (positionSettingMode == PositionSettingModeType.Transform)
-                {
-                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
-                }
+                UpdateGeodeticPoseInTransformMode();
 
                 geodeticPosition = new GeodeticPositionForInspector(value);
 
@@ -59,15 +56,12 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
             get
             {
-                // Update geodeticPosition
-                if (positionSettingMode == PositionSettingModeType.Transform)
-                {
-                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
-                }
+                UpdateGeodeticPoseInTransformMode();
 
                 return geodeticPosition.ToGeodeticPosition();
             }
         }
+
 
         [SerializeField]
         [Tooltip("Rotation in ENU coordinates")]
@@ -77,10 +71,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             set
             {
-                if (positionSettingMode == PositionSettingModeType.Transform)
-                {
-                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
-                }
+                UpdateGeodeticPoseInTransformMode();
 
                 enuRotation = value;
 
@@ -89,12 +80,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
             get
             {
-                // Update enuRotation
-                if (positionSettingMode == PositionSettingModeType.Transform)
-                {
-                    SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
-                }
-
+                UpdateGeodeticPoseInTransformMode();
                 return enuRotation;
             }
         }
@@ -107,7 +93,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         private CoordinateManager coordinateManager;
 
         private WorldBinding latestWorldBinding;
-
 
         public enum PositionSettingModeType
         {
@@ -220,6 +205,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             return null;
         }
 
+
         internal void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding)
         {
             SyncGeodeticPoseAndUnityPose(worldBinding, positionSettingMode);
@@ -239,6 +225,14 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                     // If in "lat/lon to transform" mode, update transform.
                     UpdateTransformWithGeodeticPosition(worldBinding);
                     break;
+            }
+        }
+
+        private void UpdateGeodeticPoseInTransformMode()
+        {
+            if (positionSettingMode == PositionSettingModeType.Transform)
+            {
+                SyncGeodeticPoseAndUnityPose(GetLatestWorldBinding(), PositionSettingModeType.Transform);
             }
         }
 
