@@ -88,21 +88,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         private WorldBinding latestWorldBinding;
 
-        private WorldBinding GetLatestWorldBinding()
-        {
-            if (latestWorldBinding != null)
-            {
-                return latestWorldBinding;
-            }
-
-            var coordinateManager = CoordinateManager.Instance;
-            if (coordinateManager != null)
-            {
-                return coordinateManager.LatestWorldBinding;
-            }
-
-            return null;
-        }
 
         public enum PositionSettingModeType
         {
@@ -189,6 +174,22 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         }
 #endif
 
+        private WorldBinding GetLatestWorldBinding()
+        {
+            if (latestWorldBinding != null)
+            {
+                return latestWorldBinding;
+            }
+
+            var coordinateManager = CoordinateManager.Instance;
+            if (coordinateManager != null)
+            {
+                return coordinateManager.LatestWorldBinding;
+            }
+
+            return null;
+        }
+
         internal void SyncGeodeticPoseAndUnityPose(WorldBinding worldBinding)
         {
             SyncGeodeticPoseAndUnityPose(worldBinding, positionSettingMode);
@@ -198,7 +199,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         {
             latestWorldBinding = worldBinding;
 
-            //switch (positionSettingMode)
             switch (syncMode)
             {
                 case PositionSettingModeType.Transform:
@@ -218,8 +218,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 return;
             }
-
-            // latestWorldBinding = worldBinding;
 
             var gp = geodeticPosition.ToGeodeticPosition();
             var geodeticPose = new GeodeticPose(gp, enuRotation);
@@ -262,7 +260,6 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         private void OnCoordinatesBound(WorldBinding worldBinding)
         {
-            // BindCoordinates(worldBinding);
             SyncGeodeticPoseAndUnityPose(worldBinding);
             gameObject.SetActive(true);
         }
