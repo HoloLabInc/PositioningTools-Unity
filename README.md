@@ -39,9 +39,8 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 
 #### Import Immersal SDK
 
-Download the Immersal SDK Core unitypackage from the [developer portal](https://developers.immersal.com).  
-Download the Immersal SDK Core Assembly Definition unitypackage from [this link](https://github.com/HoloLabInc/PositioningTools-Unity/raw/main/_tools/ImmersalSDK_AssemblyDefinition.unitypackage).  
-Import these packages.  
+Download the Immersal SDK Core unitypackage from the [developer portal](https://developers.immersal.com) and import it.  
+Supported version is 1.19.0 or later.
 
 #### Import
 
