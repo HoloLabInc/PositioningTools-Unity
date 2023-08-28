@@ -53,7 +53,7 @@ namespace HoloLab.PositioningTools.Immersal.UI
             var password = PlayerPrefs.GetString(passwordInputFieldKey);
             passwordInputField.text = password;
 
-            var serverUrl = PlayerPrefs.GetString(serverUrlInputFieldKey, ImmersalSDK.DefaultServer);
+            var serverUrl = PlayerPrefs.GetString(serverUrlInputFieldKey, immersalSDK.defaultServerURL);
             serverUrlInputField.text = serverUrl;
         }
 
@@ -66,7 +66,7 @@ namespace HoloLab.PositioningTools.Immersal.UI
             PlayerPrefs.SetString(emailAddressInputFieldKey, emailAddress);
             PlayerPrefs.SetString(passwordInputFieldKey, password);
 
-            if (serverUrl != ImmersalSDK.DefaultServer)
+            if (serverUrl != immersalSDK.defaultServerURL)
             {
                 immersalSDK.localizationServer = serverUrl;
                 PlayerPrefs.SetString(serverUrlInputFieldKey, serverUrl);
