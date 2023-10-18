@@ -25,16 +25,35 @@ namespace HoloLab.PositioningTools.Immersal
         {
             foreach (var addedQR in eventArgs.Added)
             {
-                Debug.Log($"Marker detected: {addedQR.Text}");
-                // Instantiate(qrVisualizerPrefab, addedQR.transform);
+                var spaceBinding = ARTrackedQRImageToSpaceBinding(addedQR);
+                if (addedQR.TrackingReliable)
+                {
+                    coordinateManager.BindSpace(spaceBinding);
+                }
+            }
+
+            foreach (var updatedQR in eventArgs.Updated)
+            {
+                var spaceBinding = ARTrackedQRImageToSpaceBinding(updatedQR);
+                if (updatedQR.TrackingReliable)
+                {
+                    coordinateManager.BindSpace(spaceBinding);
+                }
             }
 
             foreach (var removedQR in eventArgs.Removed)
             {
-                Debug.Log($"Marker lost: {removedQR.Text}");
-                var spaceBinding = new SpaceBinding(removedQR.transform, spaceType, removedQR.Text);
+                var spaceBinding = ARTrackedQRImageToSpaceBinding(removedQR);
                 coordinateManager.UnbindSpace(spaceBinding);
             }
+        }
+
+        private static SpaceBinding ARTrackedQRImageToSpaceBinding(ARTrackedQRImage qr)
+        {
+            var qrTransform = qr.transform;
+            var pose = new Pose(qrTransform.position, qrTransform.rotation);
+            var spaceBinding = new SpaceBinding(pose, spaceType, qr.Text);
+            return spaceBinding;
         }
     }
 }
