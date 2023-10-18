@@ -3,11 +3,18 @@ symlinks:
   # Sample folder
   - src: ..\packages\jp.co.hololab.positioningtools\Samples~
     dest: ..\unity\PositioningTools\Assets\PositioningTools.Samples
+
   - src: ..\packages\jp.co.hololab.positioningtools.arcoreextensions\Samples~
     dest: ..\unity\PositioningTools-ARCore-GeospatialAPI\Assets\PositioningTools.ARCoreExtensions.Samples
+
+  - src: ..\packages\jp.co.hololab.positioningtools.arfoundationmarker\Samples~
+    dest: ..\unity\PositioningTools-Marker-ARFoundation\Assets\PositioningTools.ARFoundationMarker.Samples
+
   - src: ..\packages\jp.co.hololab.positioningtools.immersal\Samples~
     dest: ..\unity\PositioningTools-Immersal-ARFoundation\Assets\PositioningTools.Immersal.Samples
+
   - src: ..\packages\jp.co.hololab.positioningtools.nmea\Samples~
     dest: ..\unity\PositioningTools-NMEA-ARFoundation\Assets\PositioningTools.NMEA.Samples
+
   - src: ..\packages\jp.co.hololab.positioningtools.vuforia\Samples~
     dest: ..\unity\PositioningTools-VuforiaAreaTarget\Assets\PositioningTools.Vuforia.Samples
