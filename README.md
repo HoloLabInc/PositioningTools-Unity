@@ -36,6 +36,7 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 #### Requirements
 
 - ARFoundation
+- [ARFoundationQRTracking-Unity](https://github.com/HoloLabInc/ARFoundationQRTracking-Unity)
 
 #### Import
 
