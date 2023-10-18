@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "2.2.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.collab-proxy": {
       "version": "1.9.0",
       "depth": 0,
@@ -162,8 +169,28 @@
       },
       "url": "https://packages.unity.com"
     },
+    "jp.co.hololab.arfoundationqrtracking": {
+      "version": "https://github.com/HoloLabInc/ARFoundationQRTracking-Unity.git?path=packages/jp.co.hololab.arfoundationqrtracking",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c1b5e0514941dc5f6d499ec32f2281f459f051c9"
+    },
+    "jp.co.hololab.arfoundationqrtracking.libraries": {
+      "version": "https://github.com/HoloLabInc/ARFoundationQRTracking-Unity.git?path=packages/jp.co.hololab.arfoundationqrtracking.libraries",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c1b5e0514941dc5f6d499ec32f2281f459f051c9"
+    },
     "jp.co.hololab.positioningtools": {
       "version": "file:../../../packages/jp.co.hololab.positioningtools",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "jp.co.hololab.positioningtools.arfoundationmarker": {
+      "version": "file:../../../packages/jp.co.hololab.positioningtools.arfoundationmarker",
       "depth": 0,
       "source": "local",
       "dependencies": {}
