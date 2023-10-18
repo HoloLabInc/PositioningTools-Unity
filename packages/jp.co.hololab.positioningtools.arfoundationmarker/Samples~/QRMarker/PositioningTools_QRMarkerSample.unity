@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 909129095}
   - component: {fileID: 909129094}
   m_Layer: 0
-  m_Name: SampleObject
+  m_Name: SampleObject (Please set your QR text in inspector)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
