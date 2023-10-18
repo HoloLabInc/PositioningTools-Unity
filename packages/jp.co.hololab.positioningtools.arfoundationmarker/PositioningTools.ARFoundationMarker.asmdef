@@ -1,0 +1,23 @@
+{
+    "name": "PositioningTools.ARFoundationMarker",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ddc9502104b19204e806efb31b283e26",
+        "GUID:41b26f94d35fc234baf982098e16d54c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "jp.co.hololab.arfoundationqrtracking",
+            "expression": "",
+            "define": "QRTRACKING_PRESENT"
+        }
+    ],
+    "noEngineReferences": false
+}
