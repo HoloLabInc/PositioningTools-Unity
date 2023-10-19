@@ -4,7 +4,7 @@ using HoloLab.ARFoundationQRTracking;
 using HoloLab.PositioningTools.CoordinateSystem;
 using UnityEngine;
 
-namespace HoloLab.PositioningTools.Immersal
+namespace HoloLab.PositioningTools.ARFoundationMarker
 {
     public class CoordinateBinderWithQRTracking : MonoBehaviour
     {
@@ -18,7 +18,14 @@ namespace HoloLab.PositioningTools.Immersal
             coordinateManager = CoordinateManager.Instance;
 
             qrTracker = FindObjectOfType<ARFoundationQRTracker>();
-            qrTracker.OnTrackedQRImagesChanged += QRTracker_OnTrackedQRImagesChanged;
+            if (qrTracker == null)
+            {
+                Debug.LogError($"{nameof(ARFoundationQRTracker)} not found in scene. Please add {nameof(ARFoundationQRTracker)} to AR Session Origin");
+            }
+            else
+            {
+                qrTracker.OnTrackedQRImagesChanged += QRTracker_OnTrackedQRImagesChanged;
+            }
         }
 
         private void QRTracker_OnTrackedQRImagesChanged(ARTrackedQRImagesChangedEventArgs eventArgs)
