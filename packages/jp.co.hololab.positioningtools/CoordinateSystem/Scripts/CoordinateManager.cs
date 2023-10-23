@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+
 #if UNITY_EDITOR
 using UnityEditor;
-
 #endif
 
 namespace HoloLab.PositioningTools.CoordinateSystem
@@ -38,11 +38,34 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         public event Action<SpaceBinding> OnSpaceLost;
 
-        public static CoordinateManager Instance { get; private set; }
+        private static CoordinateManager instance;
+        public static CoordinateManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<CoordinateManager>();
+                    if (instance == null)
+                    {
+                        var instanceObject = new GameObject("CoordinateManager");
+                        instance = instanceObject.AddComponent<CoordinateManager>();
+                    }
+                }
+                return instance;
+            }
+        }
 
         private void Awake()
         {
-            Instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                Debug.LogWarning("Multiple CoordinateManager found in scene.");
+            }
         }
 
         public void BindCoordinates(WorldBinding worldBinding)
