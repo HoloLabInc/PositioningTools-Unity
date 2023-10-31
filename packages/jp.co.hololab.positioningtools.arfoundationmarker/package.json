@@ -1,6 +1,6 @@
 {
   "name": "jp.co.hololab.positioningtools.arfoundationmarker",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "displayName": "Positioning Tools AR Foundation Marker",
   "description": "A package for aligning positions using AR Foundation Image Marker Tracking",
   "unity": "2019.4",
