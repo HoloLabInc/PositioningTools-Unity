@@ -9,7 +9,7 @@ using UnityEngine.TestTools;
 
 public class GeodeticCoordinateJsonSerializerTests
 {
-    // [Test]
+    [Test]
     public void TrySerialize()
     {
         var geodeticPosition = new GeodeticPosition(1.0, 2.0, 3.0);
@@ -20,11 +20,9 @@ public class GeodeticCoordinateJsonSerializerTests
         var result = serializer.TrySerialize(coordinate, out var text);
 
         Assert.That(result, Is.True);
-
-        Assert.That(text, Is.EqualTo("{\"latitude\":1.0}"));
+        Assert.That(text, Is.EqualTo("{\"latitude\":1.0,\"longitude\":2.0,\"ellipsoidalHeight\":3.0,\"heading\":10.0}"));
     }
 
-    //implement test cases
     private static IEnumerable<object[]> DeserializeTestCases()
     {
         return new List<object[]> {

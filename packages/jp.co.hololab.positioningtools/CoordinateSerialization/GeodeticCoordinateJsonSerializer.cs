@@ -2,6 +2,7 @@ using HoloLab.PositioningTools.GeographicCoordinate;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json.Serialization;
 #if JSONNET_PRESENT
 using Newtonsoft.Json;
 #else
@@ -52,10 +53,19 @@ namespace HoloLab.PositioningTools.CoordinateSerialization
         public bool TrySerialize(GeodeticPositionWithHeading coordinate, out string text)
         {
 #if JSONNET_PRESENT
+            var contractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = contractResolver,
+                NullValueHandling = NullValueHandling.Ignore
+            };
             var jsonObject = GeodeticCoordinateJsonNetObject.Create(coordinate);
             try
             {
-                text = JsonConvert.SerializeObject(jsonObject);
+                text = JsonConvert.SerializeObject(jsonObject, jsonSerializerSettings);
                 return true;
             }
             catch (Exception)
