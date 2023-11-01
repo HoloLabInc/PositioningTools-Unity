@@ -20,6 +20,7 @@ namespace HoloLab.PositioningTools.CoordinateSerialization
             Debug.LogWarning($"Please import \"com.unity.nuget.newtonsoft-json\" package if you want to use ${nameof(GeodeticCoordinateJsonSerializer)}.");
 #endif
         }
+
         public bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo)
         {
 #if JSONNET_PRESENT
