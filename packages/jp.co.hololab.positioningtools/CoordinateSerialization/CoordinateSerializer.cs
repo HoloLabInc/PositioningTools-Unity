@@ -6,10 +6,22 @@ namespace HoloLab.PositioningTools.CoordinateSerialization
 {
     public class CoordinateSerializer : ICoordinateSerializer
     {
-        private readonly List<ICoordinateSerializer> serializers = new List<ICoordinateSerializer>()
+        private readonly IReadOnlyList<ICoordinateSerializer> serializers;
+
+        private readonly List<ICoordinateSerializer> defaultSerializers = new List<ICoordinateSerializer>()
         {
             new GeodeticCoordinateJsonSerializer(),
         };
+
+        public CoordinateSerializer()
+        {
+            this.serializers = defaultSerializers;
+        }
+
+        public CoordinateSerializer(IReadOnlyList<ICoordinateSerializer> serializers)
+        {
+            this.serializers = serializers;
+        }
 
         public bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo)
         {

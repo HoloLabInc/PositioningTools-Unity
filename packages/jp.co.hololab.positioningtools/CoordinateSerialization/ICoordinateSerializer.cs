@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HoloLab.PositioningTools.CoordinateSerialization
 {
-    interface ICoordinateSerializer
+    public interface ICoordinateSerializer
     {
         bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo);
 
