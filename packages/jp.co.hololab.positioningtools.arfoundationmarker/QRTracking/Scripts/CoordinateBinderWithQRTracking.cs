@@ -16,6 +16,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
         private readonly Dictionary<ARTrackedQRImage, ICoordinateInfo> coordinateInfoDictionary = new Dictionary<ARTrackedQRImage, ICoordinateInfo>();
         private readonly CoordinateSerializer coordinateSerializer = new CoordinateSerializer();
 
+        private static readonly float sin45 = Mathf.Sin(45 * Mathf.Deg2Rad);
         private const string spaceType = SpaceOrigin.SpaceTypeMarker;
 
         private void Start()
@@ -103,15 +104,28 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
                 case GeodeticPositionWithHeading geodeticPositionWithHeading:
                     {
                         var qrTransform = qr.transform;
-                        var position = qrTransform.position;
+                        var qrPosition = qrTransform.position;
 
-                        // TODO
-                        // var rotation = Quaternion.identity;
-                        var rotation = qrTransform.rotation;
-                        var pose = new Pose(position, rotation);
+                        Quaternion rotation;
+                        var qrUp = qrTransform.up;
+                        if (qrUp.y > sin45)
+                        {
+                            var forward = qrTransform.forward;
+                            forward.y = 0;
+                            rotation = Quaternion.LookRotation(forward, Vector3.up);
+                        }
+                        else
+                        {
+                            var forward = -qrUp;
+                            forward.y = 0;
+                            rotation = Quaternion.LookRotation(forward, Vector3.up);
+                        }
+
+                        var pose = new Pose(qrPosition, rotation);
 
                         var geodeticRotation = Quaternion.AngleAxis(geodeticPositionWithHeading.Heading, Vector3.up);
                         var geodeticPose = new GeodeticPose(geodeticPositionWithHeading.GeodeticPosition, geodeticRotation);
+
                         worldBinding = new WorldBinding(pose, geodeticPose);
                         return true;
                     }
