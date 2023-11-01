@@ -39,13 +39,4 @@ namespace HoloLab.PositioningTools.CoordinateSerialization
             return false;
         }
     }
-
-    interface ICoordinateSerializer
-    {
-        bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo);
-
-        bool TrySerialize(ICoordinateInfo coordinateInfo, out string text);
-    }
-
-    public interface ICoordinateInfo { }
 }
