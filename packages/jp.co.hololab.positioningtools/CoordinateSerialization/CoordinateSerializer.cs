@@ -7,113 +7,123 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoordinateSerializer
+namespace HoloLab.PositioningTools.CoordinateSerialization
 {
-    private readonly List<ICoordinateSerializer> serializers = new List<ICoordinateSerializer>()
+
+    public class CoordinateSerializer
+    {
+        private readonly List<ICoordinateSerializer> serializers = new List<ICoordinateSerializer>()
     {
         new GeodeticCoordinateJsonSerializer(),
     };
 
-    public bool TryDeserialize(string text, out ICoordinateInfo coordinate)
-    {
-        foreach (var serializer in serializers)
+        public bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo)
         {
-            if (serializer.TryDeserialize(text, out coordinate))
+            foreach (var serializer in serializers)
             {
+                if (serializer.TryDeserialize(text, out coordinateInfo))
+                {
+                    return true;
+                }
+            }
+
+            coordinateInfo = null;
+            return false;
+        }
+
+        public bool TrySerialize(ICoordinateInfo coordinateInfo, out string text)
+        {
+            foreach (var serializer in serializers)
+            {
+                if (serializer.TrySerialize(coordinateInfo, out text))
+                {
+                    return true;
+                }
+            }
+
+            text = null;
+            return false;
+        }
+    }
+
+    interface ICoordinateSerializer
+    {
+        bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo);
+
+        bool TrySerialize(ICoordinateInfo coordinateInfo, out string text);
+    }
+
+    public class GeodeticCoordinateJsonSerializer : ICoordinateSerializer
+    {
+        public bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo)
+        {
+            try
+            {
+                var geodeticPositionObject = JsonConvert.DeserializeObject<GeodeticPositionJsonNetObject>(text);
+                coordinateInfo = geodeticPositionObject.ToCoordinateInfo();
                 return true;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                // Do nothing
+            }
+            coordinateInfo = null;
+            return false;
+        }
+
+        public bool TrySerialize(ICoordinateInfo coordinateInfo, out string text)
+        {
+            switch (coordinateInfo)
+            {
+                case GeodeticPositionWithHeading geodeticPositionWithHeading:
+                    return TrySerialize(geodeticPositionWithHeading, out text);
+                default:
+                    text = null;
+                    return false;
             }
         }
 
-        coordinate = null;
-        return false;
-    }
-
-    public bool TrySerialize(ICoordinateInfo coordinate, out string text)
-    {
-        foreach (var serializer in serializers)
+        public bool TrySerialize(GeodeticPositionWithHeading coordinate, out string text)
         {
-            if (serializer.TrySerialize(coordinate, out text))
-            {
-                return true;
-            }
-        }
-
-        text = null;
-        return false;
-    }
-}
-
-interface ICoordinateSerializer
-{
-    bool TryDeserialize(string text, out ICoordinateInfo coordinate);
-
-    bool TrySerialize(ICoordinateInfo coordinate, out string text);
-}
-
-public class GeodeticCoordinateJsonSerializer : ICoordinateSerializer
-{
-    public bool TryDeserialize(string text, out ICoordinateInfo coordinate)
-    {
-        try
-        {
-            var geodeticPositionObject = JsonConvert.DeserializeObject<GeodeticPositionJsonNetObject>(text);
-            coordinate = geodeticPositionObject.ToCoordinateInfo();
-            return true;
-        }
-        catch (Exception)
-        {
-            // Do nothing
-        }
-        coordinate = null;
-        return false;
-    }
-
-    public bool TrySerialize(ICoordinateInfo coordinate, out string text)
-    {
-        switch (coordinate)
-        {
-            case GeodeticPositionWithHeading geodeticPositionWithHeading:
-                return TrySerialize(geodeticPositionWithHeading, out text);
-            default:
-                text = null;
-                return false;
+            text = null;
+            return false;
         }
     }
 
-    public bool TrySerialize(GeodeticPositionWithHeading coordinate, out string text)
+    public interface ICoordinateInfo { }
+
+    public class GeodeticPositionWithHeading : ICoordinateInfo
     {
-        text = null;
-        return false;
-    }
-}
+        public GeodeticPosition GeodeticPosition { get; }
+        public float Heading { get; }
 
-public interface ICoordinateInfo { }
-
-public class GeodeticPositionWithHeading : ICoordinateInfo
-{
-    public GeodeticPosition GeodeticPosition;
-    public float Heading;
-}
-
-internal class GeodeticPositionJsonNetObject
-{
-    public double Latitude { set; get; }
-
-    private double Lat { set { Latitude = value; } }
-
-    public double Longitude { set; get; }
-    public double EllipsoidalHeight { set; get; }
-
-    public float Heading { set; get; }
-
-    public ICoordinateInfo ToCoordinateInfo()
-    {
-        var geodeticPosition = new GeodeticPosition(Latitude, Longitude, EllipsoidalHeight);
-
-        return new GeodeticPositionWithHeading()
+        public GeodeticPositionWithHeading(GeodeticPosition geodeticPosition, float heading)
         {
-            GeodeticPosition = geodeticPosition,
-            Heading = Heading
-        };
+            GeodeticPosition = geodeticPosition;
+            Heading = heading;
+        }
+    }
+
+    internal class GeodeticPositionJsonNetObject
+    {
+        public double Latitude { set; get; }
+        public double Lat { set { Latitude = value; } }
+
+        public double Longitude { set; get; }
+        public double Long { set { Longitude = value; } }
+        public double Lon { set { Longitude = value; } }
+        public double Lng { set { Longitude = value; } }
+
+        public double EllipsoidalHeight { set; get; }
+        public double Height { set { EllipsoidalHeight = value; } }
+
+        public float Heading { set; get; }
+
+        public ICoordinateInfo ToCoordinateInfo()
+        {
+            var geodeticPosition = new GeodeticPosition(Latitude, Longitude, EllipsoidalHeight);
+            return new GeodeticPositionWithHeading(geodeticPosition, Heading);
+        }
     }
 }
