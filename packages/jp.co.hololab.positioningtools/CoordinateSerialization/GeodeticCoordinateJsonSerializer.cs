@@ -2,9 +2,9 @@ using HoloLab.PositioningTools.GeographicCoordinate;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json.Serialization;
 #if JSONNET_PRESENT
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 #else
 using UnityEngine;
 #endif
@@ -16,7 +16,7 @@ namespace HoloLab.PositioningTools.CoordinateSerialization
         public GeodeticCoordinateJsonSerializer()
         {
 #if !JSONNET_PRESENT
-            Debug.LogWarning($"Please import \"com.unity.nuget.newtonsoft-json\" package if you want to use ${nameof(GeodeticCoordinateJsonSerializer)}.")
+            Debug.LogWarning($"Please import \"com.unity.nuget.newtonsoft-json\" package if you want to use ${nameof(GeodeticCoordinateJsonSerializer)}.");
 #endif
         }
         public bool TryDeserialize(string text, out ICoordinateInfo coordinateInfo)
