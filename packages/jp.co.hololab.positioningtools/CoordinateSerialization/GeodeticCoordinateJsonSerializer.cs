@@ -2,6 +2,7 @@ using HoloLab.PositioningTools.GeographicCoordinate;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 #if JSONNET_PRESENT
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -91,19 +92,29 @@ namespace HoloLab.PositioningTools.CoordinateSerialization
         }
     }
 
+    [Preserve]
     internal class GeodeticCoordinateJsonNetObject
     {
+        [Preserve]
         public double Latitude { set; get; }
+        [Preserve]
         public double Lat { set { Latitude = value; } }
 
+        [Preserve]
         public double Longitude { set; get; }
+        [Preserve]
         public double Long { set { Longitude = value; } }
+        [Preserve]
         public double Lon { set { Longitude = value; } }
+        [Preserve]
         public double Lng { set { Longitude = value; } }
 
+        [Preserve]
         public double EllipsoidalHeight { set; get; }
+        [Preserve]
         public double Height { set { EllipsoidalHeight = value; } }
 
+        [Preserve]
         public float Heading { set; get; }
 
         public static GeodeticCoordinateJsonNetObject Create(GeodeticPositionWithHeading geodeticPositionWithHeadings)

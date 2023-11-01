@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HoloLab.PositioningTools.CoordinateSerialization
 {
-    public class CoordinateSerializer
+    public class CoordinateSerializer : ICoordinateSerializer
     {
         private readonly List<ICoordinateSerializer> serializers = new List<ICoordinateSerializer>()
         {
