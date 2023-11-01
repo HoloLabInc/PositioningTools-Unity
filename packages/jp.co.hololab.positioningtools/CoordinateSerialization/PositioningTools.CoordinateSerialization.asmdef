@@ -1,0 +1,23 @@
+{
+    "name": "PositioningTools.CoordinateSerialization",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0df9762fedbe5e44f8c93309c32c356e",
+        "GUID:ddc9502104b19204e806efb31b283e26"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "",
+            "define": "JSONNET_PRESENT"
+        }
+    ],
+    "noEngineReferences": false
+}
