@@ -24,7 +24,10 @@ namespace HoloLab.PositioningTools.ARCoreExtensions.Samples
             var geodeticPosition = geodeticPose.GeodeticPosition;
 
             var builder = new StringBuilder();
-            builder.AppendLine($"[UnityPose] Position: {pose.position}, EnuRotation: {pose.rotation.eulerAngles}");
+            if (pose.HasValue)
+            {
+                builder.AppendLine($"[UnityPose] Position: {pose.Value.position}, EnuRotation: {pose.Value.rotation.eulerAngles}");
+            }
             builder.AppendLine($"[GeodeticPose]");
             builder.AppendLine($"Latitude: {geodeticPosition.Latitude}");
             builder.AppendLine($"Longitude: {geodeticPosition.Longitude}");
