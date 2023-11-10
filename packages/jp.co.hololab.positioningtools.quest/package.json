@@ -9,9 +9,9 @@
   },
   "samples": [
     {
-      "displayName": "QR Marker",
-      "description": "A sample scene for QR marker alignment",
-      "path": "Samples~/QRMarker"
+      "displayName": "Scene Anchors",
+      "description": "A sample scene for scene anchors alignment",
+      "path": "Samples~/SceneAnchors"
     }
   ]
 }
