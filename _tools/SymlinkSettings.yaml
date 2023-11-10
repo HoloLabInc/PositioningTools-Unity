@@ -16,5 +16,8 @@ symlinks:
   - src: ..\packages\jp.co.hololab.positioningtools.nmea\Samples~
     dest: ..\unity\PositioningTools-NMEA-ARFoundation\Assets\PositioningTools.NMEA.Samples
 
+  - src: ..\packages\jp.co.hololab.positioningtools.quest\Samples~
+    dest: ..\unity\PositioningTools-Quest\Assets\PositioningTools.Quest.Samples
+
   - src: ..\packages\jp.co.hololab.positioningtools.vuforia\Samples~
     dest: ..\unity\PositioningTools-VuforiaAreaTarget\Assets\PositioningTools.Vuforia.Samples
