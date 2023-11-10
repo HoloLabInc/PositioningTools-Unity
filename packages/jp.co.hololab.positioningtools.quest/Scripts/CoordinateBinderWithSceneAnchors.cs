@@ -53,7 +53,6 @@ namespace HoloLab.PositioningTools.Quest
                 {
                     if (sceneAnchor.IsTracked == false)
                     {
-                        Debug.LogWarning("Not tracked");
                         continue;
                     }
 
