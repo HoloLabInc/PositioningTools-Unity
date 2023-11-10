@@ -1,0 +1,17 @@
+{
+    "name": "PositioningTools.Quest",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ddc9502104b19204e806efb31b283e26",
+        "GUID:f64c9ebcd7899c3448a08dc9f9ddbe30"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
