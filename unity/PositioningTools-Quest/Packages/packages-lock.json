@@ -188,6 +188,12 @@
       "source": "local",
       "dependencies": {}
     },
+    "jp.co.hololab.positioningtools.quest": {
+      "version": "file:../../../packages/jp.co.hololab.positioningtools.quest",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
