@@ -87,9 +87,9 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 
 ## Setup for Meta Quest
 
-#### Import Oculus Integraion
+#### Import Oculus Integration
 
-Import Oculus Intergation from the Unity Asset Store.  
+Import Oculus Integration from the Unity Asset Store.  
 https://assetstore.unity.com/packages/tools/integration/oculus-integration-deprecated-82022
 
 #### Import

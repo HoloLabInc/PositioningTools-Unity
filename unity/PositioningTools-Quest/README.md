@@ -4,7 +4,7 @@
 
 ### Import Oculus Integration
 
-Import Oculus Intergation to the Unity project.
+Import Oculus Integration to the Unity project.
 
 https://assetstore.unity.com/packages/tools/integration/oculus-integration-deprecated-82022
 
