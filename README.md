@@ -85,6 +85,23 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 "jp.co.hololab.positioningtools.vuforia": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.vuforia",
 ```
 
+## Setup for Meta Quest
+
+#### Import Oculus Integration
+
+Import Oculus Integration from the Unity Asset Store.  
+https://assetstore.unity.com/packages/tools/integration/oculus-integration-deprecated-82022
+
+#### Import
+
+Open `Packages\manifest.json` and add the following lines in "dependencies".
+
+```
+"jp.co.hololab.positioningtools": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools",
+"jp.co.hololab.positioningtools.geographiccoordinate": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.geographiccoordinate",
+"jp.co.hololab.positioningtools.quest": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.quest",
+```
+
 ## Sample Unity Projects
 
 - [PositioningTools-ARCore-GeospatialAPI](./unity/PositioningTools-ARCore-GeospatialAPI)
@@ -92,6 +109,7 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 - [PositioningTools-Marker-ARFoundation](./unity/PositioningTools-Marker-ARFoundation)
 - [PositioningTools-Immersal-ARFoundation](./unity/PositioningTools-Immersal-ARFoundation)
 - [PositioningTools-VuforiaAreaTarget](./unity/PositioningTools-VuforiaAreaTarget)
+- [PositioningTools-Quest](./unity/PositioningTools-Quest)
 
 ## License
 
