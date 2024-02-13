@@ -12,6 +12,9 @@ namespace HoloLab.PositioningTools.Immersal
 {
     public class ImmersalMapManager : MonoBehaviour
     {
+        [SerializeField]
+        private bool enableMapCache = true;
+
         private ImmersalSDK immersalSDK;
         private ARSpace arSpace;
 
@@ -29,7 +32,6 @@ namespace HoloLab.PositioningTools.Immersal
 
         public event Action OnLogin;
 
-
         private void Awake()
         {
             immersalSDK = GetComponentInChildren<ImmersalSDK>();
@@ -41,7 +43,10 @@ namespace HoloLab.PositioningTools.Immersal
                 arSpace = arSpaceObject.AddComponent<ARSpace>();
             }
 
-            LoadMapCache();
+            if (enableMapCache)
+            {
+                LoadMapCache();
+            }
         }
 
         private void LoadMapCache()
@@ -111,14 +116,17 @@ namespace HoloLab.PositioningTools.Immersal
                     var map = await ARSpace.LoadAndInstantiateARMap(arSpace.transform, result);
 
                     // Cache map data
-                    try
+                    if (enableMapCache)
                     {
-                        var mapResultCache = mapResultSerializer.Serialize(result);
-                        File.WriteAllText(mapResultCache, mapResultCache);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogException(e);
+                        try
+                        {
+                            var mapResultCache = mapResultSerializer.Serialize(result);
+                            File.WriteAllText(mapResultCache, mapResultCache);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogException(e);
+                        }
                     }
 
                     completionSource.TrySetResult((map, ""));
