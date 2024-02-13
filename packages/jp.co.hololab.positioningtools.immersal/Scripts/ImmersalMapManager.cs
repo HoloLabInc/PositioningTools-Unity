@@ -4,6 +4,7 @@ using Immersal.REST;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -11,9 +12,23 @@ namespace HoloLab.PositioningTools.Immersal
 {
     public class ImmersalMapManager : MonoBehaviour
     {
-        private ImmersalSDK immersalSDK;
+        [SerializeField]
+        private bool enableMapCache = true;
 
+        private ImmersalSDK immersalSDK;
         private ARSpace arSpace;
+
+        private SDKMapResult mapResultCache;
+
+        private readonly MapResultSerializer mapResultSerializer = new MapResultSerializer();
+
+        private string MapCacheFilepath
+        {
+            get
+            {
+                return Path.Combine(Application.temporaryCachePath, "PositioningTools_ImmersalMapManager_MapCache.json");
+            }
+        }
 
         public event Action OnLogin;
 
@@ -26,6 +41,29 @@ namespace HoloLab.PositioningTools.Immersal
             {
                 var arSpaceObject = new GameObject("ARSpace");
                 arSpace = arSpaceObject.AddComponent<ARSpace>();
+            }
+
+            if (enableMapCache)
+            {
+                LoadMapCache();
+            }
+        }
+
+        private void LoadMapCache()
+        {
+            try
+            {
+                if (File.Exists(MapCacheFilepath) == false)
+                {
+                    return;
+                }
+
+                var mapCacheJson = File.ReadAllText(MapCacheFilepath);
+                mapResultSerializer.TryDeserialize(mapCacheJson, out mapResultCache);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
             }
         }
 
@@ -57,6 +95,13 @@ namespace HoloLab.PositioningTools.Immersal
                 return (arMap, "");
             }
 
+            // Load from cache
+            if (mapId == mapResultCache.metadata.id)
+            {
+                var map = await ARSpace.LoadAndInstantiateARMap(arSpace.transform, mapResultCache);
+                return (map, "");
+            }
+
             var completionSource = new TaskCompletionSource<(ARMap ARMap, string Error)>();
 
             var job = new JobLoadMapBinaryAsync
@@ -69,6 +114,21 @@ namespace HoloLab.PositioningTools.Immersal
                 if (result.metadata.error == "none")
                 {
                     var map = await ARSpace.LoadAndInstantiateARMap(arSpace.transform, result);
+
+                    // Cache map data
+                    if (enableMapCache)
+                    {
+                        try
+                        {
+                            var mapResultCache = mapResultSerializer.Serialize(result);
+                            File.WriteAllText(MapCacheFilepath, mapResultCache);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogException(e);
+                        }
+                    }
+
                     completionSource.TrySetResult((map, ""));
                 }
                 else
