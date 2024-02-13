@@ -23,12 +23,27 @@ namespace HoloLab.PositioningTools.Immersal.UI
         private Button signInButtton = null;
 
         private ImmersalMapManager immersalMapManager;
+        private ImmersalSDK immersalSDK;
 
-        private const string emailAddressInputFieldKey = "ImmersalSignInUI_emailAddressInputField";
-        private const string passwordInputFieldKey = "ImmersalSignInUI_passwordInputField";
         private const string serverUrlInputFieldKey = "ImmersalSignInUI_serverUrlInputField";
 
-        private ImmersalSDK immersalSDK;
+        public string EmailAddress
+        {
+            get => emailAddressInputField.text;
+            set => emailAddressInputField.text = value;
+        }
+
+        public string Password
+        {
+            get => passwordInputField.text;
+            set => passwordInputField.text = value;
+        }
+
+        public string ServerUrl
+        {
+            get => serverUrlInputField.text;
+            set => serverUrlInputField.text = value;
+        }
 
         public void Initialize(ImmersalMapManager immersalMapManager)
         {
@@ -47,12 +62,6 @@ namespace HoloLab.PositioningTools.Immersal.UI
 
         private void LoadSettings()
         {
-            var emailAddress = PlayerPrefs.GetString(emailAddressInputFieldKey);
-            emailAddressInputField.text = emailAddress;
-
-            var password = PlayerPrefs.GetString(passwordInputFieldKey);
-            passwordInputField.text = password;
-
             var serverUrl = PlayerPrefs.GetString(serverUrlInputFieldKey, immersalSDK.defaultServerURL);
             serverUrlInputField.text = serverUrl;
         }
@@ -62,9 +71,6 @@ namespace HoloLab.PositioningTools.Immersal.UI
             var emailAddress = emailAddressInputField.text.Trim();
             var password = passwordInputField.text.Trim();
             var serverUrl = serverUrlInputField.text.Trim();
-
-            PlayerPrefs.SetString(emailAddressInputFieldKey, emailAddress);
-            PlayerPrefs.SetString(passwordInputFieldKey, password);
 
             if (serverUrl != immersalSDK.defaultServerURL)
             {
