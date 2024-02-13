@@ -121,7 +121,7 @@ namespace HoloLab.PositioningTools.Immersal
                         try
                         {
                             var mapResultCache = mapResultSerializer.Serialize(result);
-                            File.WriteAllText(mapResultCache, mapResultCache);
+                            File.WriteAllText(MapCacheFilepath, mapResultCache);
                         }
                         catch (Exception e)
                         {
