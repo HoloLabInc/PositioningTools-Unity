@@ -31,6 +31,7 @@ namespace HoloLab.PositioningTools.Immersal
         }
 
         public event Action OnLogin;
+        public event Action OnLogout;
 
         private void Awake()
         {
@@ -49,24 +50,6 @@ namespace HoloLab.PositioningTools.Immersal
             }
         }
 
-        private void LoadMapCache()
-        {
-            try
-            {
-                if (File.Exists(MapCacheFilepath) == false)
-                {
-                    return;
-                }
-
-                var mapCacheJson = File.ReadAllText(MapCacheFilepath);
-                mapResultSerializer.TryDeserialize(mapCacheJson, out mapResultCache);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-
         public async Task LoginAsync(string username, string password)
         {
             var job = new JobLoginAsync()
@@ -74,7 +57,6 @@ namespace HoloLab.PositioningTools.Immersal
                 username = username,
                 password = password
             };
-
 
             job.OnResult += (SDKLoginResult result) =>
             {
@@ -86,6 +68,12 @@ namespace HoloLab.PositioningTools.Immersal
             };
 
             await job.RunJobAsync();
+        }
+
+        public void Logout()
+        {
+            immersalSDK.developerToken = "";
+            OnLogout?.Invoke();
         }
 
         public async Task<(ARMap ARMap, string Error)> LoadMapAsync(int mapId)
@@ -144,6 +132,24 @@ namespace HoloLab.PositioningTools.Immersal
 
             await job.RunJobAsync();
             return await completionSource.Task;
+        }
+
+        private void LoadMapCache()
+        {
+            try
+            {
+                if (File.Exists(MapCacheFilepath) == false)
+                {
+                    return;
+                }
+
+                var mapCacheJson = File.ReadAllText(MapCacheFilepath);
+                mapResultSerializer.TryDeserialize(mapCacheJson, out mapResultCache);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
     }
 }
