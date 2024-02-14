@@ -2,6 +2,7 @@ using Immersal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,13 +61,7 @@ namespace HoloLab.PositioningTools.Immersal.UI
             immersalMapManager.OnLogin += ImmersalMapManager_OnLogin;
         }
 
-        private void LoadSettings()
-        {
-            var serverUrl = PlayerPrefs.GetString(serverUrlInputFieldKey, immersalSDK.defaultServerURL);
-            serverUrlInputField.text = serverUrl;
-        }
-
-        private async void Login()
+        public async Task LoginAsync()
         {
             var emailAddress = emailAddressInputField.text.Trim();
             var password = passwordInputField.text.Trim();
@@ -82,6 +77,17 @@ namespace HoloLab.PositioningTools.Immersal.UI
             signInButtton.interactable = false;
             await immersalMapManager.LoginAsync(emailAddress, password);
             signInButtton.interactable = true;
+        }
+
+        private void LoadSettings()
+        {
+            var serverUrl = PlayerPrefs.GetString(serverUrlInputFieldKey, immersalSDK.defaultServerURL);
+            serverUrlInputField.text = serverUrl;
+        }
+
+        private async void Login()
+        {
+            await LoginAsync();
         }
 
         private void ImmersalMapManager_OnLogin()
