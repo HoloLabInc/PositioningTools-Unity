@@ -1,11 +1,12 @@
-﻿using System;
+﻿#if QRTRACKING_PRESENT
+using System;
 using System.Collections;
 using System.Collections.Generic;
-#if QRTRACKING_PRESENT
 using HoloLab.ARFoundationQRTracking;
 using HoloLab.PositioningTools.CoordinateSerialization;
 using HoloLab.PositioningTools.CoordinateSystem;
 #endif
+
 using UnityEngine;
 
 namespace HoloLab.PositioningTools.ARFoundationMarker
@@ -140,3 +141,4 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 #endif
     }
 }
+

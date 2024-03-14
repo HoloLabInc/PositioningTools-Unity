@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using HoloLab.PositioningTools.CoordinateSystem;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -10,6 +8,8 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
     {
         private ARTrackedImageManager arTrackedImageManager;
         private CoordinateManager coordinateManager;
+
+        private const string spaceType = SpaceOrigin.SpaceTypeMarker;
 
         private void Awake()
         {
@@ -38,15 +38,8 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             }
         }
 
-        private void Start()
-        {
-
-        }
-
-
         private void ARTrackedImageManager_trackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
         {
-            Debug.Log("changed");
             foreach (var newImage in eventArgs.added)
             {
                 if (IsTrackingReliable(newImage))
@@ -57,7 +50,6 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 
             foreach (var updatedImage in eventArgs.updated)
             {
-                Debug.Log("Updated image: " + updatedImage.referenceImage.name);
                 if (IsTrackingReliable(updatedImage))
                 {
                     BindSpaceCoordinates(updatedImage);
@@ -66,7 +58,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 
             foreach (var removedImage in eventArgs.removed)
             {
-                // UnbindSpaceCoordinates(removedImage);
+                UnbindSpaceCoordinates(removedImage);
             }
         }
 
@@ -79,23 +71,29 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             }
         }
 
-        private bool IsTrackingReliable(ARTrackedImage arTrackedImage)
+        private void UnbindSpaceCoordinates(ARTrackedImage trackedImage)
         {
-            return true;
+            var spaceBinding = ARTrackedImageToSpaceBinding(trackedImage);
+            if (string.IsNullOrEmpty(spaceBinding.SpaceId) == false)
+            {
+                coordinateManager.UnbindSpace(spaceBinding);
+            }
         }
 
-        private const string spaceType = SpaceOrigin.SpaceTypeMarker;
+        private bool IsTrackingReliable(ARTrackedImage arTrackedImage)
+        {
+            // TODO
+            return true;
+        }
 
         private static SpaceBinding ARTrackedImageToSpaceBinding(ARTrackedImage trackedImage)
         {
             var imageTransform = trackedImage.transform;
             var pose = new Pose(imageTransform.position, imageTransform.rotation);
-            // var spaceId = trackedImage.name;
-            // Debug.Log(spaceId);
-            Debug.Log(trackedImage.referenceImage.name);
             var spaceId = trackedImage.referenceImage.name;
             var spaceBinding = new SpaceBinding(pose, spaceType, spaceId);
             return spaceBinding;
         }
     }
 }
+
