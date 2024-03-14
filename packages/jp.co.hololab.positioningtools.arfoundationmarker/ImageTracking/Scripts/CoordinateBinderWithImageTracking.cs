@@ -118,7 +118,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 
         private static bool ScaleEstimatedInIOS(ARTrackedImage arTrackedImage)
         {
-#if QRTRACKING_PRESENT && (UNITY_IOS || UNITY_VISIONOS)
+#if QRTRACKING_PRESENT && !UNITY_EDITOR && (UNITY_IOS || UNITY_VISIONOS)
             var estimatedScale = HoloLab.ARFoundationQRTracking.iOS.ARKitImageScaleEstimationInterop.GetEstimatedScale(arTrackedImage);
             return estimatedScale != 1.0;
 #else
