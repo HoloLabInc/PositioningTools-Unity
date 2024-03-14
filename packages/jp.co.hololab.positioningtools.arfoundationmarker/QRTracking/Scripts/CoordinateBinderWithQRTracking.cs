@@ -1,6 +1,4 @@
 ﻿#if QRTRACKING_PRESENT
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using HoloLab.ARFoundationQRTracking;
 using HoloLab.PositioningTools.CoordinateSerialization;
