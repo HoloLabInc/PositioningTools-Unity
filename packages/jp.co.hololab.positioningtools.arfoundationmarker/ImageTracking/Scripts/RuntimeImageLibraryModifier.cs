@@ -52,17 +52,12 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             }
 
 #if UNITY_IOS || UNITY_VISIONOS
-            var scaleEstimationEnabled = false;
-
-#if QRTRACKING_PRESENT
-            scaleEstimationEnabled = enableScaleEstimationForARKit != null;
-#endif
-
-            if (scaleEstimationEnabled == false)
+            if (ScaleEstimationEnabledInIOS() == false)
             {
                 Debug.LogWarning("EnableScaleEstimationForARKit is not found in the scene. Please add EnableScaleEstimationForARKit to AR Session Origin.");
                 return;
             }
+
             float? widthInMeters = 1f;
 #else
             float? widthInMeters = null;
@@ -130,6 +125,15 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             {
                 Debug.LogWarning("MutableRuntimeReferenceImageLibrary is not supported in this platform");
             }
+        }
+
+        private bool ScaleEstimationEnabledInIOS()
+        {
+#if QRTRACKING_PRESENT
+            return enableScaleEstimationForARKit != null;
+#else
+            return false;
+#endif
         }
     }
 }
