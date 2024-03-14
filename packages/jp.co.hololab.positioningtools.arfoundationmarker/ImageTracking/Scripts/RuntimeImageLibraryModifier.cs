@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -23,17 +24,17 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
         private ARTrackedImageManager trackedImageManager;
         private MutableRuntimeReferenceImageLibrary mutableImageLibrary;
 
-        private void Start()
+        private async void Start()
         {
             trackedImageManager = GetComponent<ARTrackedImageManager>();
             InitializeMutalbeImageLibrary();
             foreach (var image in images)
             {
-                AddImage(image);
+                await AddImageAsync(image);
             }
         }
 
-        public void AddImage(ReferenceImageAddedAtRuntime image)
+        public async Task AddImageAsync(ReferenceImageAddedAtRuntime image)
         {
             if (mutableImageLibrary == null)
             {
@@ -46,7 +47,30 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 #else
             float? widthInMeters = null;
 #endif
-            mutableImageLibrary.ScheduleAddImageWithValidationJob(image.Texture, image.Name, widthInMeters);
+
+            while (true)
+            {
+                var jobState = mutableImageLibrary.ScheduleAddImageWithValidationJob(image.Texture, image.Name, widthInMeters);
+
+                while (true)
+                {
+                    if (jobState.jobHandle.IsCompleted)
+                    {
+                        break;
+                    }
+
+                    await Task.Delay(100);
+                    continue;
+                }
+
+                if (jobState.status == AddReferenceImageJobStatus.Success)
+                {
+                    return;
+                }
+
+                // Wait and retry job
+                await Task.Delay(1000);
+            }
         }
 
         private void InitializeMutalbeImageLibrary()
