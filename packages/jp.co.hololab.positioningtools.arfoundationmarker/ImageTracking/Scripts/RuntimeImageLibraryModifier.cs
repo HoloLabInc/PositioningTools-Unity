@@ -24,9 +24,18 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
         private ARTrackedImageManager trackedImageManager;
         private MutableRuntimeReferenceImageLibrary mutableImageLibrary;
 
+#if QRTRACKING_PRESENT
+        private HoloLab.ARFoundationQRTracking.iOS.EnableScaleEstimationForARKit enableScaleEstimationForARKit;
+#endif
+
         private async void Start()
         {
             trackedImageManager = GetComponent<ARTrackedImageManager>();
+
+#if QRTRACKING_PRESENT
+            enableScaleEstimationForARKit = FindObjectOfType<HoloLab.ARFoundationQRTracking.iOS.EnableScaleEstimationForARKit>();
+#endif
+
             InitializeMutalbeImageLibrary();
             foreach (var image in images)
             {
@@ -43,6 +52,17 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             }
 
 #if UNITY_IOS || UNITY_VISIONOS
+            var scaleEstimationEnabled = false;
+
+#if QRTRACKING_PRESENT
+            scaleEstimationEnabled = enableScaleEstimationForARKit != null;
+#endif
+
+            if (scaleEstimationEnabled == false)
+            {
+                Debug.LogWarning("EnableScaleEstimationForARKit is not found in the scene. Please add EnableScaleEstimationForARKit to AR Session Origin.");
+                return;
+            }
             float? widthInMeters = 1f;
 #else
             float? widthInMeters = null;

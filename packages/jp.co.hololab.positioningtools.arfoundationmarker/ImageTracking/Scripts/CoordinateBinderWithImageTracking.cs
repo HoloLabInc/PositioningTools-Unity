@@ -9,6 +9,10 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
         private ARTrackedImageManager arTrackedImageManager;
         private CoordinateManager coordinateManager;
 
+#if QRTRACKING_PRESENT
+        private HoloLab.ARFoundationQRTracking.iOS.EnableScaleEstimationForARKit enableScaleEstimationForARKit;
+#endif
+
         private const string spaceType = SpaceOrigin.SpaceTypeMarker;
 
         private void Awake()
@@ -20,6 +24,13 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             }
 
             coordinateManager = CoordinateManager.Instance;
+        }
+
+        private void Start()
+        {
+#if QRTRACKING_PRESENT
+            enableScaleEstimationForARKit = FindObjectOfType<HoloLab.ARFoundationQRTracking.iOS.EnableScaleEstimationForARKit>();
+#endif
         }
 
         private void OnEnable()
@@ -80,12 +91,28 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             }
         }
 
-        private static bool IsTrackingReliable(ARTrackedImage arTrackedImage)
+        private bool IsTrackingReliable(ARTrackedImage arTrackedImage)
         {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_VISIONOS)
-            return ScaleEstimatedInIOS(arTrackedImage);
+            if (ScaleEstimationEnabledInIOS())
+            {
+                return ScaleEstimatedInIOS(arTrackedImage);
+            }
+            else
+            {
+                return true;
+            }
 #else
             return true;
+#endif
+        }
+
+        private bool ScaleEstimationEnabledInIOS()
+        {
+#if QRTRACKING_PRESENT
+            return enableScaleEstimationForARKit != null;
+#else
+            return false;
 #endif
         }
 
