@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+#if QRTRACKING_PRESENT
 using HoloLab.ARFoundationQRTracking;
 using HoloLab.PositioningTools.CoordinateSerialization;
 using HoloLab.PositioningTools.CoordinateSystem;
+#endif
 using UnityEngine;
 
 namespace HoloLab.PositioningTools.ARFoundationMarker
 {
     public class CoordinateBinderWithQRTracking : MonoBehaviour
     {
+#if QRTRACKING_PRESENT
         private CoordinateManager coordinateManager;
         private ARFoundationQRTracker qrTracker;
 
@@ -134,5 +137,6 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             worldBinding = null;
             return false;
         }
+#endif
     }
 }
