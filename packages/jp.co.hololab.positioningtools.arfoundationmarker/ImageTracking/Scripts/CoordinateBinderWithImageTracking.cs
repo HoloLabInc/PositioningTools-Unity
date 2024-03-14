@@ -83,10 +83,6 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
         private static bool IsTrackingReliable(ARTrackedImage arTrackedImage)
         {
 #if !UNITY_EDITOR && (UNITY_IOS || UNITY_VISIONOS)
-            if (arTrackedImage.referenceImage.specifySize)
-            {
-                return true;
-            }
             return ScaleEstimatedInIOS(arTrackedImage);
 #else
             return true;
@@ -96,7 +92,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
         private static bool ScaleEstimatedInIOS(ARTrackedImage arTrackedImage)
         {
 #if QRTRACKING_PRESENT && (UNITY_IOS || UNITY_VISIONOS)
-            var estimatedScale = HoloLab.ARFoundationQRTracking.iOS.ARKitImageScaleEstimationInterop.GetEstimatedScale(ARTrackedImage);
+            var estimatedScale = HoloLab.ARFoundationQRTracking.iOS.ARKitImageScaleEstimationInterop.GetEstimatedScale(arTrackedImage);
             return estimatedScale != 1.0;
 #else
             Debug.LogWarning("ARFoundationQRTracking is needed to use scale estimation in iOS");
@@ -114,4 +110,3 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
         }
     }
 }
-
