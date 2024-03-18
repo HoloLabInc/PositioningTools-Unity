@@ -132,6 +132,13 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             var imageTransform = trackedImage.transform;
             var pose = new Pose(imageTransform.position, imageTransform.rotation);
             var spaceId = trackedImage.referenceImage.name;
+#if UNITY_VISIONOS
+            if (spaceId != null && spaceId.Length > 37)
+            {
+                // Trim the UUID from the end of the name
+                spaceId = spaceId.Substring(0, spaceId.Length - 37);
+            }
+#endif
             var spaceBinding = new SpaceBinding(pose, spaceType, spaceId);
             return spaceBinding;
         }
