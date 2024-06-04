@@ -90,11 +90,26 @@ namespace HoloLab.PositioningTools.Immersal
                 return (map, "");
             }
 
+            // Load my map
+            var mapResult = await LoadMapFromServerAsync(mapId, true);
+
+            if (mapResult.Error == "not found")
+            {
+                // Load public map
+                mapResult = await LoadMapFromServerAsync(mapId, false);
+            }
+
+            return mapResult;
+        }
+
+        private async Task<(ARMap ARMap, string Error)> LoadMapFromServerAsync(int mapId, bool useToken)
+        {
             var completionSource = new TaskCompletionSource<(ARMap ARMap, string Error)>();
 
             var job = new JobLoadMapBinaryAsync
             {
-                id = mapId
+                id = mapId,
+                useToken = useToken
             };
 
             job.OnResult += async (SDKMapResult result) =>
