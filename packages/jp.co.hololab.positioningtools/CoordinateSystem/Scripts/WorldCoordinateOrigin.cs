@@ -359,7 +359,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         internal static GeodeticPose GetGeodeticPoseWithBoundPoint(Pose unityPose, GeodeticPose boundPoseInWorld, Pose boundPoseInUnity)
         {
             var relativePosition = Quaternion.Inverse(boundPoseInUnity.rotation) * (unityPose.position - boundPoseInUnity.position);
-            var relativeRotation = unityPose.rotation * Quaternion.Inverse(boundPoseInUnity.rotation);
+            var relativeRotation = Quaternion.Inverse(boundPoseInUnity.rotation) * unityPose.rotation;
 
             return GetGeodeticPoseWithRelativePose(relativePosition, relativeRotation, boundPoseInWorld);
         }
@@ -367,7 +367,7 @@ namespace HoloLab.PositioningTools.CoordinateSystem
         internal static GeodeticPose GetGeodeticPoseWithBoundTransform(Pose unityPose, GeodeticPose boundPoseInWorld, Transform boundTransformInUnity)
         {
             var relativePosition = boundTransformInUnity.InverseTransformPoint(unityPose.position);
-            var relativeRotation = unityPose.rotation * Quaternion.Inverse(boundTransformInUnity.rotation);
+            var relativeRotation = Quaternion.Inverse(boundTransformInUnity.rotation) * unityPose.rotation;
 
             return GetGeodeticPoseWithRelativePose(relativePosition, relativeRotation, boundPoseInWorld);
         }

@@ -102,6 +102,8 @@ namespace Tests
 
                 var heightEpsilon = 0.0001;
                 Assert.That(convertedGeodeticPose.GeodeticPosition.EllipsoidalHeight, Is.EqualTo(targetPose.GeodeticPosition.EllipsoidalHeight).Within(heightEpsilon));
+
+                Assert.That(convertedGeodeticPose.EnuRotation, Is.EqualTo(targetPose.EnuRotation).Using(QuaternionEqualityComparer.Instance));
             }
         }
 
