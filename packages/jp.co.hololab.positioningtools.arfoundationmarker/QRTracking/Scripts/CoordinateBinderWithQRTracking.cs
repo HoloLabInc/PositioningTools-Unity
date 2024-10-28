@@ -28,7 +28,11 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             qrTracker = FindObjectOfType<ARFoundationQRTracker>();
             if (qrTracker == null)
             {
+#if ARFOUNDATION_5_OR_NEWER
+                Debug.LogError($"{nameof(ARFoundationQRTracker)} not found in scene. Please add {nameof(ARFoundationQRTracker)} to XR Origin");
+#else
                 Debug.LogError($"{nameof(ARFoundationQRTracker)} not found in scene. Please add {nameof(ARFoundationQRTracker)} to AR Session Origin");
+#endif
             }
             else
             {
