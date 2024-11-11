@@ -99,6 +99,32 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             OnSpaceLost?.Invoke(spaceBinding);
         }
 
+        public bool TryConvertUnityPoseToGeodeticPose(Pose poseInUnitySpace, out GeodeticPose geodeticPose)
+        {
+            var worldBinding = latestWorldBinding;
+            if (worldBinding == null)
+            {
+                geodeticPose = null;
+                return false;
+            }
+
+            if (worldBinding.Transform != null)
+            {
+                geodeticPose = WorldCoordinateUtils.GetGeodeticPoseWithBoundTransform(poseInUnitySpace, worldBinding.GeodeticPose, worldBinding.Transform);
+                return true;
+            }
+            else if (worldBinding.ApplicationPose.HasValue)
+            {
+                geodeticPose = WorldCoordinateUtils.GetGeodeticPoseWithBoundPoint(poseInUnitySpace, worldBinding.GeodeticPose, worldBinding.ApplicationPose.Value);
+                return true;
+            }
+            else
+            {
+                geodeticPose = null;
+                return false;
+            }
+        }
+
 #if UNITY_EDITOR
         [CustomEditor(typeof(CoordinateManager))]
         private class SpaceCoordinateManagerEditor : Editor
