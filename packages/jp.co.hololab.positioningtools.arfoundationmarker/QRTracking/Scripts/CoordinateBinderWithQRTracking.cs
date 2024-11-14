@@ -49,7 +49,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
                     coordinateInfoDictionary[addedQR] = coordinateInfo;
                 }
 
-                if (addedQR.TrackingReliable)
+                if (IsAccuratelyTracked(addedQR))
                 {
                     BindSpaceCoordinates(addedQR);
                     BindWorldCoordinates(addedQR);
@@ -58,7 +58,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 
             foreach (var updatedQR in eventArgs.Updated)
             {
-                if (updatedQR.TrackingReliable)
+                if (IsAccuratelyTracked(updatedQR))
                 {
                     BindSpaceCoordinates(updatedQR);
                     BindWorldCoordinates(updatedQR);
@@ -93,6 +93,11 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             {
                 coordinateManager.BindCoordinates(worldBinding);
             }
+        }
+
+        private static bool IsAccuratelyTracked(ARTrackedQRImage qr)
+        {
+            return qr.TrackingReliable && qr.ARTrackedImage.trackingState == UnityEngine.XR.ARSubsystems.TrackingState.Tracking;
         }
 
         private static SpaceBinding ARTrackedQRImageToSpaceBinding(ARTrackedQRImage qr)
