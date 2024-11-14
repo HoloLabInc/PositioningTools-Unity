@@ -1,4 +1,5 @@
 ﻿#if QRTRACKING_PRESENT
+using System;
 using System.Collections.Generic;
 using HoloLab.ARFoundationQRTracking;
 using HoloLab.PositioningTools.CoordinateSerialization;
@@ -20,6 +21,8 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 
         private static readonly float sin45 = Mathf.Sin(45 * Mathf.Deg2Rad);
         private const string spaceType = SpaceOrigin.SpaceTypeMarker;
+
+        public event Action<ARTrackedQRImage> OnARTrackedQRImageBound;
 
         private void Start()
         {
@@ -49,19 +52,21 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
                     coordinateInfoDictionary[addedQR] = coordinateInfo;
                 }
 
-                if (addedQR.TrackingReliable)
+                if (IsAccuratelyTracked(addedQR))
                 {
                     BindSpaceCoordinates(addedQR);
                     BindWorldCoordinates(addedQR);
+                    InvokeOnARTrackedQRImageBound(addedQR);
                 }
             }
 
             foreach (var updatedQR in eventArgs.Updated)
             {
-                if (updatedQR.TrackingReliable)
+                if (IsAccuratelyTracked(updatedQR))
                 {
                     BindSpaceCoordinates(updatedQR);
                     BindWorldCoordinates(updatedQR);
+                    InvokeOnARTrackedQRImageBound(updatedQR);
                 }
             }
 
@@ -93,6 +98,23 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             {
                 coordinateManager.BindCoordinates(worldBinding);
             }
+        }
+
+        private void InvokeOnARTrackedQRImageBound(ARTrackedQRImage qr)
+        {
+            try
+            {
+                OnARTrackedQRImageBound?.Invoke(qr);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
+
+        private static bool IsAccuratelyTracked(ARTrackedQRImage qr)
+        {
+            return qr.TrackingReliable && qr.ARTrackedImage.trackingState == UnityEngine.XR.ARSubsystems.TrackingState.Tracking;
         }
 
         private static SpaceBinding ARTrackedQRImageToSpaceBinding(ARTrackedQRImage qr)
