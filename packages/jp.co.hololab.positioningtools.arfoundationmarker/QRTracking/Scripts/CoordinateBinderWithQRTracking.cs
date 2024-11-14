@@ -1,4 +1,5 @@
 ﻿#if QRTRACKING_PRESENT
+using System;
 using System.Collections.Generic;
 using HoloLab.ARFoundationQRTracking;
 using HoloLab.PositioningTools.CoordinateSerialization;
@@ -20,6 +21,8 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 
         private static readonly float sin45 = Mathf.Sin(45 * Mathf.Deg2Rad);
         private const string spaceType = SpaceOrigin.SpaceTypeMarker;
+
+        public event Action<ARTrackedQRImage> OnARTrackedQRImageBound;
 
         private void Start()
         {
@@ -53,6 +56,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
                 {
                     BindSpaceCoordinates(addedQR);
                     BindWorldCoordinates(addedQR);
+                    InvokeOnARTrackedQRImageBound(addedQR);
                 }
             }
 
@@ -62,6 +66,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
                 {
                     BindSpaceCoordinates(updatedQR);
                     BindWorldCoordinates(updatedQR);
+                    InvokeOnARTrackedQRImageBound(updatedQR);
                 }
             }
 
@@ -92,6 +97,18 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             if (TryConvertARTrackedQRImageToWorldBinding(qr, coordinateInfo, out var worldBinding))
             {
                 coordinateManager.BindCoordinates(worldBinding);
+            }
+        }
+
+        private void InvokeOnARTrackedQRImageBound(ARTrackedQRImage qr)
+        {
+            try
+            {
+                OnARTrackedQRImageBound?.Invoke(qr);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
 
