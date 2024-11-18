@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using HoloLab.ARFoundationQRTracking;
 using HoloLab.PositioningTools.CoordinateSerialization;
 using HoloLab.PositioningTools.CoordinateSystem;
+using HoloLab.PositioningTools.GeographicCoordinate;
+
 #endif
 
 using UnityEngine;
@@ -15,6 +17,28 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 #if QRTRACKING_PRESENT
         private CoordinateManager coordinateManager;
         private ARFoundationQRTracker qrTracker;
+
+        private WorldBinding latestWorldBinding;
+
+        private float worldBindingEllipsoidalHeightOffset;
+        public float WorldBindingEllipsoidalHeightOffset
+        {
+            get
+            {
+                return worldBindingEllipsoidalHeightOffset;
+            }
+            set
+            {
+                var offsetDelta = value - worldBindingEllipsoidalHeightOffset;
+                worldBindingEllipsoidalHeightOffset = value;
+
+                if (latestWorldBinding != null && coordinateManager != null && coordinateManager.LatestWorldBinding == latestWorldBinding)
+                {
+                    latestWorldBinding = ApplyOffsetToWorldBinding(latestWorldBinding, offsetDelta);
+                    coordinateManager.BindCoordinates(latestWorldBinding);
+                }
+            }
+        }
 
         private readonly Dictionary<ARTrackedQRImage, ICoordinateInfo> coordinateInfoDictionary = new Dictionary<ARTrackedQRImage, ICoordinateInfo>();
         private readonly CoordinateSerializer coordinateSerializer = new CoordinateSerializer();
@@ -94,8 +118,9 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
                 return;
             }
 
-            if (TryConvertARTrackedQRImageToWorldBinding(qr, coordinateInfo, out var worldBinding))
+            if (TryConvertARTrackedQRImageToWorldBinding(qr, coordinateInfo, worldBindingEllipsoidalHeightOffset, out var worldBinding))
             {
+                latestWorldBinding = worldBinding;
                 coordinateManager.BindCoordinates(worldBinding);
             }
         }
@@ -125,7 +150,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             return spaceBinding;
         }
 
-        private static bool TryConvertARTrackedQRImageToWorldBinding(ARTrackedQRImage qr, ICoordinateInfo coordinateInfo, out WorldBinding worldBinding)
+        private static bool TryConvertARTrackedQRImageToWorldBinding(ARTrackedQRImage qr, ICoordinateInfo coordinateInfo, float ellipsoidalOffset, out WorldBinding worldBinding)
         {
             switch (coordinateInfo)
             {
@@ -152,7 +177,9 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
                         var pose = new Pose(qrPosition, rotation);
 
                         var geodeticRotation = Quaternion.AngleAxis(geodeticPositionWithHeading.Heading, Vector3.up);
-                        var geodeticPose = new GeodeticPose(geodeticPositionWithHeading.GeodeticPosition, geodeticRotation);
+                        var geodeticPosition = geodeticPositionWithHeading.GeodeticPosition;
+                        var geodeticPositionWithOffset = new GeodeticPosition(geodeticPosition.Latitude, geodeticPosition.Longitude, geodeticPosition.EllipsoidalHeight + ellipsoidalOffset);
+                        var geodeticPose = new GeodeticPose(geodeticPositionWithOffset, geodeticRotation);
 
                         worldBinding = new WorldBinding(pose, geodeticPose);
                         return true;
@@ -161,6 +188,24 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
 
             worldBinding = null;
             return false;
+        }
+
+        private static WorldBinding ApplyOffsetToWorldBinding(WorldBinding worldBinding, float ellipsoidalOffset)
+        {
+            var geodeticPose = worldBinding.GeodeticPose;
+            var geodeticPosition = geodeticPose.GeodeticPosition;
+
+            var newPosition = new GeodeticPosition(geodeticPosition.Latitude, geodeticPosition.Longitude, geodeticPosition.EllipsoidalHeight + ellipsoidalOffset);
+            var newGeodeticPose = new GeodeticPose(newPosition, geodeticPose.EnuRotation);
+
+            if (worldBinding.ApplicationPose.HasValue)
+            {
+                return new WorldBinding(worldBinding.ApplicationPose.Value, newGeodeticPose);
+            }
+            else
+            {
+                return new WorldBinding(worldBinding.Transform, newGeodeticPose);
+            }
         }
 #endif
     }
