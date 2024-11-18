@@ -44,11 +44,34 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             set => autoUpdateReferencePoint = value;
         }
 
+        private float ellipsoidalHeightOffset;
+        public float EllipsoidalHeightOffset
+        {
+            get
+            {
+                return ellipsoidalHeightOffset;
+            }
+            set
+            {
+                var offsetDelta = value - ellipsoidalHeightOffset;
+                ellipsoidalHeightOffset = value;
+
+                var coordinateManager = CoordinateManager.Instance;
+                if (latestWorldBinding != null && coordinateManager != null && coordinateManager.LatestWorldBinding == latestWorldBinding)
+                {
+                    latestWorldBinding = ApplyOffsetToWorldBinding(latestWorldBinding, offsetDelta);
+                    coordinateManager.BindCoordinates(latestWorldBinding);
+                }
+            }
+        }
+
         private GeographicLocation? latestLocation;
         private CardinalDirection? latestDirection;
 
         private WorldBinding referencePointBinding;
         private WorldBinding subReferencePointBinding;
+
+        private WorldBinding latestWorldBinding;
 
         public event Action<WorldBinding> OnReferencePointBound;
         public event Action<WorldBinding> OnSubReferencePointBound;
@@ -129,15 +152,15 @@ namespace HoloLab.PositioningTools.CoordinateSystem
 
         private void Bind()
         {
-            var spaceCoordinateManager = CoordinateManager.Instance;
+            var coordinateManager = CoordinateManager.Instance;
 
             if (referencePointBinding == null)
             {
                 return;
             }
 
-            // If the sub reference point is not specified, only the referene point is used.
             WorldBinding binding;
+            // If the sub reference point is not specified, only the referene point is used.
             if (subReferencePointBinding == null)
             {
                 binding = referencePointBinding;
@@ -146,7 +169,9 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 binding = CalcWorldBindingWithSubReferencePoint(referencePointBinding, subReferencePointBinding);
             }
-            spaceCoordinateManager.BindCoordinates(binding);
+
+            latestWorldBinding = ApplyOffsetToWorldBinding(binding, ellipsoidalHeightOffset);
+            coordinateManager.BindCoordinates(latestWorldBinding);
         }
 
         internal static WorldBinding CalcWorldBindingWithSubReferencePoint(WorldBinding referencePoint, WorldBinding subReferencePoint)
@@ -209,6 +234,24 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             var rotation = Quaternion.LookRotation(right, Vector3.up);
             rotation = rotation * Quaternion.AngleAxis(90, Vector3.up);
             return rotation;
+        }
+
+        private static WorldBinding ApplyOffsetToWorldBinding(WorldBinding worldBinding, float ellipsoidalOffset)
+        {
+            var geodeticPose = worldBinding.GeodeticPose;
+            var geodeticPosition = geodeticPose.GeodeticPosition;
+
+            var newPosition = new GeodeticPosition(geodeticPosition.Latitude, geodeticPosition.Longitude, geodeticPosition.EllipsoidalHeight + ellipsoidalOffset);
+            var newGeodeticPose = new GeodeticPose(newPosition, geodeticPose.EnuRotation);
+
+            if (worldBinding.ApplicationPose.HasValue)
+            {
+                return new WorldBinding(worldBinding.ApplicationPose.Value, newGeodeticPose);
+            }
+            else
+            {
+                return new WorldBinding(worldBinding.Transform, newGeodeticPose);
+            }
         }
     }
 }
