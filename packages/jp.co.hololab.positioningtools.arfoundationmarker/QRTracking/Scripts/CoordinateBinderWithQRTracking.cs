@@ -29,7 +29,7 @@ namespace HoloLab.PositioningTools.ARFoundationMarker
             }
             set
             {
-                var offsetDelta = worldBindingEllipsoidalHeightOffset - value;
+                var offsetDelta = value - worldBindingEllipsoidalHeightOffset;
                 worldBindingEllipsoidalHeightOffset = value;
 
                 if (latestWorldBinding != null && coordinateManager != null && coordinateManager.LatestWorldBinding == latestWorldBinding)
