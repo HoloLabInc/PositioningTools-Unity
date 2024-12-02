@@ -1,6 +1,6 @@
 {
   "name": "jp.co.hololab.positioningtools.geographiccoordinate.tests",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "displayName": "Positioning Tools Geographic Coordinate Tests",
   "description": "Tests for Positioning Tools Geographic Coordinate",
   "unity": "2019.4",
