@@ -1,6 +1,6 @@
 {
   "name": "jp.co.hololab.positioningtools.nmea",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "displayName": "Positioning Tools NMEA",
   "description": "A package for aligning positions using NMEA devices",
   "unity": "2021.3",
