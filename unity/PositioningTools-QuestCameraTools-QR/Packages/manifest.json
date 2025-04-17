@@ -16,6 +16,8 @@
     "com.unity.xr.management": "4.5.1",
     "com.unity.xr.meta-openxr": "2.1.0",
     "com.unity.xr.openxr": "1.14.2",
+    "jp.co.hololab.positioningtools": "file:../../../packages/jp.co.hololab.positioningtools",
+    "jp.co.hololab.positioningtools.geographiccoordinate": "file:../../../packages/jp.co.hololab.positioningtools.geographiccoordinate",
     "jp.co.hololab.questcameratools.core": "file:../../../../QuestCameraTools-Unity/packages/jp.co.hololab.questcameratools.core",
     "jp.co.hololab.questcameratools.qr": "file:../../../../QuestCameraTools-Unity/packages/jp.co.hololab.questcameratools.qr",
     "jp.co.hololab.questcameratools.qr.libraries": "file:../../../../QuestCameraTools-Unity/packages/jp.co.hololab.questcameratools.qr.libraries",

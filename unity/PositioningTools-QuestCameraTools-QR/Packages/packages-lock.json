@@ -319,6 +319,18 @@
       },
       "url": "https://packages.unity.com"
     },
+    "jp.co.hololab.positioningtools": {
+      "version": "file:../../../packages/jp.co.hololab.positioningtools",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "jp.co.hololab.positioningtools.geographiccoordinate": {
+      "version": "file:../../../packages/jp.co.hololab.positioningtools.geographiccoordinate",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "jp.co.hololab.questcameratools.core": {
       "version": "file:../../../../QuestCameraTools-Unity/packages/jp.co.hololab.questcameratools.core",
       "depth": 0,
