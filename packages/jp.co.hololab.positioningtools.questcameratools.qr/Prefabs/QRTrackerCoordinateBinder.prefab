@@ -60,8 +60,17 @@ PrefabInstance:
       propertyPath: 'filterComponents.Array.data[1]'
       value: 
       objectReference: {fileID: 7721753979266255311}
+    - target: {fileID: 8692857928457400003, guid: 4789109892e9e1d43bb606551bec4c4a, type: 3}
+      propertyPath: onAwake.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8692857928457400003, guid: 4789109892e9e1d43bb606551bec4c4a, type: 3}
+      propertyPath: onFirstDetected.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2654118040607803819, guid: 4789109892e9e1d43bb606551bec4c4a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3915139577221928483, guid: 4789109892e9e1d43bb606551bec4c4a, type: 3}
