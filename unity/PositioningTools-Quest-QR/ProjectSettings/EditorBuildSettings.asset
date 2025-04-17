@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/App/Scenes/QRMarkerSample.unity
     guid: 80a38cab3e3526d46afd5909d1256a10
+  - enabled: 1
+    path: Assets/App/Scenes/QRMarkerConstrainedSample.unity
+    guid: bc30ce8e3e0ff5c4c9e2b9e589fd1ad8
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 548ca33798412b442af98ce376ef00ba, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: cd9f02c9222767143a8c3d4242757896, type: 2}
