@@ -1,0 +1,17 @@
+{
+    "name": "PositioningTools.QuestCameraTools.QR",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4982d36a327f1bb47a4d71a752bbcfe6",
+        "GUID:ddc9502104b19204e806efb31b283e26"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
