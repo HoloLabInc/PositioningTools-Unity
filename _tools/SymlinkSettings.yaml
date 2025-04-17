@@ -19,5 +19,8 @@ symlinks:
   - src: ..\packages\jp.co.hololab.positioningtools.quest\Samples~
     dest: ..\unity\PositioningTools-Quest\Assets\PositioningTools.Quest.Samples
 
+  - src: ..\packages\jp.co.hololab.positioningtools.questcameratools.qr\Samples~
+    dest: ..\unity\PositioningTools-Quest-QR\Assets\PositioningTools.QuestCameraTools.QR.Samples
+
   - src: ..\packages\jp.co.hololab.positioningtools.vuforia\Samples~
     dest: ..\unity\PositioningTools-VuforiaAreaTarget\Assets\PositioningTools.Vuforia.Samples
