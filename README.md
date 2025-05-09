@@ -102,6 +102,23 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 "jp.co.hololab.positioningtools.quest": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.quest",
 ```
 
+## Setup for Meta Quest QR marker tracking
+
+#### Import QuestCameraTools-Unity
+
+Refer to the link below to import **QuestCameraTools-Unity** into your project:  
+https://github.com/HoloLabInc/QuestCameraTools-Unity#importing-the-upm-packages-into-your-project
+
+#### Import
+
+Open `Packages\manifest.json` and add the following lines in "dependencies".
+
+```
+"jp.co.hololab.positioningtools": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools",
+"jp.co.hololab.positioningtools.geographiccoordinate": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.geographiccoordinate",
+"jp.co.hololab.positioningtools.questcameratools.qr": "https://github.com/HoloLabInc/PositioningTools-Unity.git?path=packages/jp.co.hololab.positioningtools.questcameratools.qr",
+```
+
 ## Sample Unity Projects
 
 - [PositioningTools-ARCore-GeospatialAPI](./unity/PositioningTools-ARCore-GeospatialAPI)
@@ -110,6 +127,7 @@ Open `Packages\manifest.json` and add the following lines in "dependencies".
 - [PositioningTools-Immersal-ARFoundation](./unity/PositioningTools-Immersal-ARFoundation)
 - [PositioningTools-VuforiaAreaTarget](./unity/PositioningTools-VuforiaAreaTarget)
 - [PositioningTools-Quest](./unity/PositioningTools-Quest)
+- [PositioningTools-Quest-QR](./unity/PositioningTools-Quest-QR)
 
 ## License
 
