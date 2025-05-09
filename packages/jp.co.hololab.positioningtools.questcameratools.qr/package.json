@@ -1,0 +1,17 @@
+{
+  "name": "jp.co.hololab.positioningtools.questcameratools.qr",
+  "version": "0.8.0",
+  "displayName": "Positioning Tools Quest Camera Tools QR",
+  "description": "A package for aligning positions using Quest QR tracking",
+  "unity": "6000.0",
+  "author": {
+    "name": "HoloLab Inc."
+  },
+  "samples": [
+    {
+      "displayName": "QR Marker",
+      "description": "A sample scene for QR marker alignment",
+      "path": "Samples~/QRMarker"
+    }
+  ]
+}
