@@ -172,7 +172,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             }
             else if (coordinateManager == null)
             {
+#if UNITY_6000_0_OR_NEWER
+                coordinateManager = FindFirstObjectByType<CoordinateManager>();
+#else
                 coordinateManager = FindObjectOfType<CoordinateManager>();
+#endif
 
                 if (coordinateManager == null)
                 {
