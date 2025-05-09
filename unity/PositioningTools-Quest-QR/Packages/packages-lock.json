@@ -338,22 +338,25 @@
       "dependencies": {}
     },
     "jp.co.hololab.questcameratools.core": {
-      "version": "file:../../../../QuestCameraTools-Unity/packages/jp.co.hololab.questcameratools.core",
+      "version": "https://github.com/HoloLabInc/QuestCameraTools-Unity.git?path=packages/jp.co.hololab.questcameratools.core",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "0226e5c018c7cf38c8100f81aa060b5742d3c4da"
     },
     "jp.co.hololab.questcameratools.qr": {
-      "version": "file:../../../../QuestCameraTools-Unity/packages/jp.co.hololab.questcameratools.qr",
+      "version": "https://github.com/HoloLabInc/QuestCameraTools-Unity.git?path=packages/jp.co.hololab.questcameratools.qr",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "0226e5c018c7cf38c8100f81aa060b5742d3c4da"
     },
     "jp.co.hololab.questcameratools.qr.libraries": {
-      "version": "file:../../../../QuestCameraTools-Unity/packages/jp.co.hololab.questcameratools.qr.libraries",
+      "version": "https://github.com/HoloLabInc/QuestCameraTools-Unity.git?path=packages/jp.co.hololab.questcameratools.qr.libraries",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "0226e5c018c7cf38c8100f81aa060b5742d3c4da"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
