@@ -45,7 +45,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
             {
                 if (instance == null)
                 {
+#if UNITY_6000_0_OR_NEWER
+                    instance = FindFirstObjectByType<CoordinateManager>();
+#else
                     instance = FindObjectOfType<CoordinateManager>();
+#endif
                     if (instance == null)
                     {
                         var instanceObject = new GameObject("CoordinateManager");
@@ -148,7 +152,11 @@ namespace HoloLab.PositioningTools.CoordinateSystem
                 var worldBinding = spaceCoordinateManager.WorldBindingInEditor;
                 if (GUILayout.Button("Align objects in scene"))
                 {
+#if UNITY_6000_0_OR_NEWER
+                    var worldCoordinateOrigins = FindObjectsByType<WorldCoordinateOrigin>(FindObjectsSortMode.None);
+#else
                     var worldCoordinateOrigins = FindObjectsOfType<WorldCoordinateOrigin>();
+#endif
                     foreach (var worldCoordinateOrigin in worldCoordinateOrigins)
                     {
                         worldCoordinateOrigin.SyncGeodeticPoseAndUnityPose(worldBinding);
